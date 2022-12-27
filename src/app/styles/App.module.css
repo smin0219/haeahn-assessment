@@ -1,0 +1,10 @@
+.logoImg{
+    position: relative;
+    float: right;
+    padding: 10px 50px 22px 0;
+}
+
+.backgroundImg{
+    width: 100%;
+    height: 30%;
+}

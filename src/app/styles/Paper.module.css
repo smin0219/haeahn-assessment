@@ -1,0 +1,16 @@
+.paperContainer{
+    display: flex;
+    width: 100%;
+    padding: 25px 0 0 100px;
+    display: flex;
+    justify-content: left;
+}
+
+.questionContainer{
+    background-color:white;
+    padding:30px;
+    border-style:solid; 
+    border-width:2px;
+    border-radius:5px;
+    width: 800px;
+}
