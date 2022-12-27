@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {Stack, TextField, Button, Input} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import {UserLogin} from '../data/Data'
-import Paper from './Paper'
+import Preparation from "./Preparation";
 
 const loginContainerStyle = {
     minWidth: '700px',
@@ -48,19 +48,22 @@ function Login() {
     const navigate = useNavigate();
 
     const handleStartButtonClick = (id, password) => {
-        UserLogin(id, password).then((res) => {
-           if(res.data.resultCode === -1){
+        if(id === '' || password === ''){
             setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
-           }
-           else{
-            navigate("/paper/", {
-                state: {
-                    id: id,
-                    password: password
-                },
-              });
-           }
-        });
+        } else{
+            UserLogin(id, password).then((res) => {
+                if(res.data.resultCode === -1){
+                    setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
+                }
+                else{
+                    navigate("/preparation/", {
+                        state: {
+                            id: id
+                        },
+                    });
+                }
+            });
+        }
     }
 
     React.useEffect(()=>{
@@ -107,7 +110,7 @@ function Login() {
                     <div style={{color:"red", textAlign:"center", width: "430px", height: "15px", paddingTop:"40px"}}>{failureMessage}</div>
                     <div style={{textAlign:"center", width: "430px", paddingTop: "50px"}}>
                         <StartButton onClick={() => {handleStartButtonClick(id, password)}}>
-                            START TEST
+                            로그인
                         </StartButton>
                     </div>
                 </Stack>

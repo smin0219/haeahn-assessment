@@ -1,16 +1,14 @@
 function Question(
     id = "",
-    number = "",
-    image = "",
-    contents = "",
+    media = "",
+    content = "",
     choices = [],
 ) {
     return {
         id: id,
-        number: number,
-        image: image,
-        contents: contents,
-        choices: choices
+        media: media,
+        content: content,
+        choices: choices,
     };
 }
 export default Question;

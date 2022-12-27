@@ -12,3 +12,12 @@ export const UserLogin = (id, password) => {
         console.error(error);
     }
 }
+
+export const GetQuiz = () => {
+    try{
+        return axios.post("https://bimapi.haeahn.com/api/BIMQuiz/quiz");
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
