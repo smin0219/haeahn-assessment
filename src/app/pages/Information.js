@@ -2,12 +2,13 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Stack, TextField, Button, Input} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {UserLogin} from '../data/Data'
+import {DownloadFile} from '../data/Data'
+import fileDownload from 'js-file-download';
 
 const informationContainerStyle = {
     minWidth: '1000px',
-    minHeight: '800px',
-    top: '10%',
+    minHeight: '810px',
+    top: '6%',
     left: '27%',
     borderRadius: '10px',
     position: 'absolute',
@@ -30,18 +31,30 @@ const StyledButton = styled(Button)`
 `;
 
 function Information(props) {
+
+    const [downloaded, setDownloaded] = React.useState(false);
+    const [warning, setWarning] = React.useState("");
+
     const navigate = useNavigate();
 
     const handleDowloadButtonClick = () => {
-        console.log("Download!!!");
+        var url = "https://avatars.githubusercontent.com/u/9919?s=280&v=4";
+        var filename = "haeahn-assessment.rvt";
+        DownloadFile(url, filename);
+        setDownloaded(true);
     }
 
     const handleStartButtonClick = () => {
-        navigate("/paper/", {
-            state: {
-                id: props.id
-            },
-        });
+        if(downloaded){
+            navigate("/paper/", {
+                state: {
+                    id: props.id
+                },
+            });
+        }
+        else{
+            setWarning("시험을 시작하기 전에 문제파일을 먼저 다운로드 해주십시오.");
+        }
     }
 
     return(
@@ -63,6 +76,9 @@ function Information(props) {
                 <Stack direction="column" style={{width: '80%', marginLeft:'10%', textAlign:'center', placeItems:'center'}}>
                     <h3>2. 시험 준비가 완료되면 아래의 버튼을 눌러 시험을 시작하십시오.</h3>
                     <StyledButton onClick={() => {handleStartButtonClick()}}>시험 시작</StyledButton>
+                </Stack>
+                <Stack direction="column" style={{width: '80%', marginLeft:'10%', textAlign:'center', placeItems:'center'}}>
+                    <h4 style={{color: 'red', paddingTop:'15px'}}>{warning}</h4>
                 </Stack>
             </Stack>
         </div>

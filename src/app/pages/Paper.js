@@ -14,7 +14,9 @@ function Paper(props) {
 
     const navigate = useNavigate();
 
+    const [isInit, setIsInit] = React.useState(true);
     const [questions, setQuestions] = React.useState([]);
+    const [solvedQuestionCount, setSolvedQuestionCount] = React.useState(0);
 
     const InfoStyle = {
         position:'fixed', 
@@ -48,14 +50,18 @@ function Paper(props) {
     }
 
     React.useEffect(() => {
-        GetQuiz().then((res) => {
-            var questions = [];
-            res.data.map((question) => {
-                questions.push(Question(question.seq, question.Media, question.content, question.Choices));
-            })
-            setQuestions(questions);
-        });
-    },[])
+        if(isInit){
+            GetQuiz().then((res) => {
+                var questions = [];
+                res.data.map((question) => {
+                    questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                })
+                setQuestions(questions);
+                setIsInit(false);
+            });
+        }
+
+    },[solvedQuestionCount])
 
     return(
         <div style={{backgroundColor:'#F5F5F5', paddingBottom:'50px'}}>
@@ -67,7 +73,7 @@ function Paper(props) {
                         <Timer/>
                     </Stack>
                     <Stack direction='row'> 
-                        <h2>완료된 문제 수: 2 / 12 </h2>
+                        <h2>완료된 문제 수: {solvedQuestionCount} / {questions.length} </h2>
                     </Stack>
                 </Stack>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
@@ -87,7 +93,7 @@ function Paper(props) {
                                 : <div style={{paddingBottom:'20px'}}></div>
                             }
                             {question.content}
-                            <RadioButtonsGroup choices={question.choices}></RadioButtonsGroup>
+                            <RadioButtonsGroup choices={question.choices} solvedQuestionCount={solvedQuestionCount} setSolvedQuestionCount={setSolvedQuestionCount}></RadioButtonsGroup>
                         </Stack>
                     </div>
                 );

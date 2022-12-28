@@ -12,7 +12,10 @@ function RadioButtonsGroup(props) {
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"
-        onClick={() => {console.log()}}
+        onClick={() => {
+            var count = props.solvedQuestionCount;
+            props.setSolvedQuestionCount(++count);
+        }}
       >
         {props.choices !== undefined ? props.choices.map((choice, idx) => {
             return (
