@@ -5,14 +5,22 @@ import { styled } from '@mui/material/styles';
 import {UserLogin} from '../data/Data'
 import Preparation from "./Preparation";
 
-const loginContainerStyle = {
+const loginContainer = {
+    display: 'flex', 
+    width:'100%', 
+    height:'100%', 
+    justifyContent: 'center', 
+    alignItems:'center', 
+    position:'relative'
+}
+
+const loginStyle = {
     minWidth: '700px',
     minHeight: '700px',
     borderRadius: '10px',
     opacity: 0.95,
     backgroundColor: 'white',
-    position: 'absolute',
-    top: '50%',
+    position: 'absolute'
 };
 
 const LoginTextField = styled(Input)`
@@ -69,8 +77,8 @@ function Login() {
     },[failureMessage]);
 
     return (
-        <div style={{display: 'flex', justifyContent: 'center', position:'relative'}}>
-            <div style={loginContainerStyle}>
+        <div style={loginContainer}>
+            <div style={loginStyle}>
                 <Stack direction="column">
                     <Stack direction="row">
                         <h1 style={{paddingTop:'80px', paddingLeft: '80px'}}>Haeahn BIM Assessment Test</h1>
