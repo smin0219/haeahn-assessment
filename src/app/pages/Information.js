@@ -38,7 +38,7 @@ function Information(props) {
     const navigate = useNavigate();
 
     const handleDowloadButtonClick = () => {
-        var url = "https://avatars.githubusercontent.com/u/9919?s=280&v=4";
+        var url = "https://bim.haeahn.com/certification/files/rac_basic_sample_project.rvt";
         var filename = "haeahn-assessment.rvt";
         DownloadFile(url, filename);
         setDownloaded(true);
@@ -53,7 +53,7 @@ function Information(props) {
             });
         }
         else{
-            setWarning("시험을 시작하기 전에 문제파일을 먼저 다운로드 해주십시오.");
+            setWarning("**시험을 시작하기 전에 문제파일을 먼저 다운로드 해주십시오**");
         }
     }
 

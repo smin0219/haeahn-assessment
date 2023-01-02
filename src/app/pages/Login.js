@@ -8,13 +8,11 @@ import Preparation from "./Preparation";
 const loginContainerStyle = {
     minWidth: '700px',
     minHeight: '700px',
-    top: '15%',
-    left: '35%',
     borderRadius: '10px',
-    position: 'absolute',
-    float: 'center',
     opacity: 0.95,
     backgroundColor: 'white',
+    position: 'absolute',
+    top: '50%',
 };
 
 const LoginTextField = styled(Input)`
@@ -71,50 +69,52 @@ function Login() {
     },[failureMessage]);
 
     return (
-        <div style={loginContainerStyle}>
-            <Stack direction="column">
-                <Stack direction="row">
-                    <h1 style={{paddingTop:'80px', paddingLeft: '80px'}}>Haeahn BIM Assessment Test</h1>
-                    <h5 style={{paddingTop:'100px', paddingLeft: '30px'}}>version v1.0</h5>
-                </Stack>
-                <Stack direction="column" style={{paddingTop:'60px', paddingLeft: '120px'}}>
-                    <h3>Email:</h3>
+        <div style={{display: 'flex', justifyContent: 'center', position:'relative'}}>
+            <div style={loginContainerStyle}>
+                <Stack direction="column">
                     <Stack direction="row">
-                        <LoginTextField
+                        <h1 style={{paddingTop:'80px', paddingLeft: '80px'}}>Haeahn BIM Assessment Test</h1>
+                        <h5 style={{paddingTop:'100px', paddingLeft: '30px'}}>version v1.0</h5>
+                    </Stack>
+                    <Stack direction="column" style={{paddingTop:'60px', paddingLeft: '120px'}}>
+                        <h3>Email:</h3>
+                        <Stack direction="row">
+                            <LoginTextField
+                                sx={{
+                                    '.MuiInputBase-input': { fontSize: '1.25rem' },
+                                }}
+                                inputProps={{
+                                    autoComplete: "off",
+                                    placeholder:"HUB ID"
+                                }}
+                                onBlur={(e) => setId(e.target.value)}
+                            >
+                            </LoginTextField >
+                            <span style={{fontSize:"20px", paddingTop:"5px", paddingLeft:"5px"}}>@haeahn.com</span>
+                        </Stack>
+                        
+                        <h3 style={{paddingTop:'15px'}}>Password:</h3>
+                        <PasswordTextField
                             sx={{
                                 '.MuiInputBase-input': { fontSize: '1.25rem' },
                             }}
                             inputProps={{
+                                type:"password",
                                 autoComplete: "off",
-                                placeholder:"HUB ID"
+                                placeholder:"HUB Password"
                             }}
-                            onBlur={(e) => setId(e.target.value)}
+                            onBlur={(e) => setPassword(e.target.value)}
                         >
-                        </LoginTextField >
-                        <span style={{fontSize:"20px", paddingTop:"5px", paddingLeft:"5px"}}>@haeahn.com</span>
+                        </PasswordTextField>
+                        <div style={{color:"red", textAlign:"center", width: "430px", height: "15px", paddingTop:"40px"}}>{failureMessage}</div>
+                        <div style={{textAlign:"center", width: "430px", paddingTop: "50px"}}>
+                            <StartButton onClick={() => {handleStartButtonClick(id, password)}}>
+                                로그인
+                            </StartButton>
+                        </div>
                     </Stack>
-                    
-                    <h3 style={{paddingTop:'15px'}}>Password:</h3>
-                    <PasswordTextField
-                        sx={{
-                            '.MuiInputBase-input': { fontSize: '1.25rem' },
-                        }}
-                        inputProps={{
-                            type:"password",
-                            autoComplete: "off",
-                            placeholder:"HUB Password"
-                        }}
-                        onBlur={(e) => setPassword(e.target.value)}
-                    >
-                    </PasswordTextField>
-                    <div style={{color:"red", textAlign:"center", width: "430px", height: "15px", paddingTop:"40px"}}>{failureMessage}</div>
-                    <div style={{textAlign:"center", width: "430px", paddingTop: "50px"}}>
-                        <StartButton onClick={() => {handleStartButtonClick(id, password)}}>
-                            로그인
-                        </StartButton>
-                    </div>
                 </Stack>
-            </Stack>
+            </div>
         </div>
     );
 }

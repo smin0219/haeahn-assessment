@@ -25,11 +25,12 @@ export const GetQuiz = () => {
 
 export const DownloadFile = (url, filename) => {
     try{
-        axios.get(url, {
-            responseType: 'blob'
-        }).then((res) => {
-            fileDownload(res.data, filename);
-        });
+        fileDownload(url, filename);
+        // axios.get(url, {
+        //     responseType: 'blob'
+        // }).then((res) => {
+        //     fileDownload(res.data, filename);
+        // });
     }
     catch(error) {
         console.error(error);
