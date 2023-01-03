@@ -5,14 +5,23 @@ import styles from '../styles/App.module.css';
 import {Paper} from '@mui/material';
 
 const endContainerStyle = {
+    display: 'flex', 
+    width:'100%', 
+    height:'100%', 
+    justifyContent: 'center', 
+    alignItems:'center', 
+    position:'relative'
+}
+
+const endStyle = {
     minWidth: '800px',
     minHeight: '300px',
-    top: '30%',
-    left: '33%',
     borderRadius: '10px',
     position: 'absolute',
     opacity: 0.95,
     backgroundColor: 'white',
+    justifyContent: 'center', 
+    alignItems:'center',
 };
 
 function End(){
@@ -27,12 +36,15 @@ function End(){
                     }}
                 >
                     <div style={endContainerStyle}>
-                        <h1 style={{textAlign:'center', marginTop:'12%'}}>제출이 완료되었습니다.</h1>
-                        <h1 style={{textAlign:'center'}}>수고하셨습니다.</h1>
+                        <div style={endStyle}>
+                            <div style={{textAlign:'center', fontSize:'25px', paddingTop:'100px'}}>제출이 완료되었습니다.</div> 
+                            <div style={{textAlign:'center', fontSize:'25px', paddingTop:'10px' }}>수고하셨습니다.</div> 
+                        </div>
                     </div>
+
                 </Paper>
             </div>
-            <div>
+            <div style={{float:'right', padding:'10px 30px 0 0'}}>
                 <img src={logoImg} className={styles.logoImg} alt="logo" />
             </div>
         </>

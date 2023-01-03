@@ -19,7 +19,7 @@ function Main(){
                     <Login/>
                 </Paper>
             </div>
-            <div>
+            <div style={{float:'right', padding:'10px 30px 0 0'}}>
                 <img src={logoImg} className={styles.logoImg} alt="logo" />
             </div>
         </>

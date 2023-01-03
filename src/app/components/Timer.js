@@ -26,8 +26,8 @@ function Timer(){
 
 			setTimer(
 				// (hours > 9 ? hours : '0' + hours) + "시간 " +
-				(minutes > 9 ? minutes : '0' + minutes) + " min "
-				+ (seconds > 9 ? seconds : '0' + seconds) + " sec"
+				(minutes > 9 ? minutes : '0' + minutes) + "분 "
+				+ (seconds > 9 ? seconds : '0' + seconds) + "초"
 			)
 		}
 	}

@@ -8,18 +8,25 @@ import FormLabel from '@mui/material/FormLabel';
 function RadioButtonsGroup(props) {
   return (
     <FormControl style={{paddingTop:'20px'}}>
-      <FormLabel id="demo-radio-buttons-group-label">Answer:</FormLabel>
+      <FormLabel id="demo-radio-buttons-group-label"></FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"
-        onClick={() => {
-            var count = props.solvedQuestionCount;
-            props.setSolvedQuestionCount(++count);
-        }}
       >
         {props.choices !== undefined ? props.choices.map((choice, idx) => {
             return (
-                <FormControlLabel key={idx} value={choice.content} control={<Radio />} label={choice.content} />
+                <FormControlLabel 
+                    key={idx}
+                    value={choice.content}
+                    control={<Radio />} 
+                    label={choice.content}
+                    onClick={(e) => {
+                        var solvedQuestions = props.solvedQuestions;
+                        solvedQuestions[props.questionNumber] = e.target.value;
+                        props.setSolvedQuestions(solvedQuestions);
+                        props.setIsUpdated(!props.isUpdated);
+                    }}
+                />
             )
         }) : <></> }
       </RadioGroup>

@@ -15,25 +15,20 @@ function Paper(props) {
     const navigate = useNavigate();
 
     const [isInit, setIsInit] = React.useState(true);
+    const [isUpdated, setIsUpdated]= React.useState(false);
     const [questions, setQuestions] = React.useState([]);
-    const [solvedQuestionCount, setSolvedQuestionCount] = React.useState(0);
+    const [solvedQuestions, setSolvedQuestions] = React.useState({});
 
-    const InfoStyle = {
-        position:'fixed', 
-        top: '30%', 
-        left: '65%'
-    }
 
     const SubmitButton = styled(Button)`
-        
-        width: 100%;
-        height: 60px;
-        border-radius: 30px;
-        background-color: lightgrey;
+        width: 180px;
+        height: 50px;
+        margin: 9px;
+        border-radius: 10px;
+        background-color: #E5E5E5;
+        margin-top: 10px;
         color: black;
         font-size: 20px;
-        margin-left: 5px;
-        margin-top: 80px;
         &:hover,
         &:active {
             color: white;
@@ -55,50 +50,63 @@ function Paper(props) {
                 var questions = [];
                 res.data.map((question) => {
                     questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                    return questions;
                 })
                 setQuestions(questions);
                 setIsInit(false);
             });
         }
 
-    },[solvedQuestionCount])
+    },[solvedQuestions.length, isInit, isUpdated])
 
     return(
-        <div style={{backgroundColor:'#F5F5F5', paddingBottom:'50px'}}>
-            <div style={InfoStyle}>
-                <img src={logoImg} className={styles.logoImg} style={{paddingLeft:"60px", paddingBottom:"60px"}} alt="logo" />
-                <Stack direction='column'>
-                    <Stack direction='row'>
-                        <h2 style={{paddingRight:"5px"}}>남은 시간:</h2>
-                        <Timer/>
-                    </Stack>
-                    <Stack direction='row'> 
-                        <h2>완료된 문제 수: {solvedQuestionCount} / {questions.length} </h2>
-                    </Stack>
-                </Stack>
+        <>
+            <Stack direction='row' style={{position:'fixed', justifyContent:'center', color:'white', height: '70px', width:'100%', backgroundColor:'#004190', zIndex:'1'}}>
+                {/* <img src={logoImg} style={{width: 'auto', height: '40px'}} alt="logo" /> */}
+                <h2 style={{paddingRight:"5px"}}>남은 시간:</h2>
+                <div style={{paddingLeft:'3px'}}></div>
+                <Timer/>
+                <h2 style={{padding: '0 100px 0 100px'}}>완료된 문제 수: {Object.keys(solvedQuestions).length} / {questions.length} </h2>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
+            </Stack>
+            <div style={{ width: 'auto', justifyContent:'center', paddingTop:'70px', backgroundColor:'#F5F5F5'}}>
+                {questions.map((question, idx) => {
+                    return(
+                        <div key={idx} className={styles.paperContainer}>
+                            <Stack direction='column' className={styles.questionContainer}>
+                                <Stack direction='column' style={{padding:'30px 30px 50px 30px'}}>
+                                    <Stack direction='row' style={{fontSize:'18px', paddingBottom:'20px'}}>
+                                        {idx+1 + " "}.
+                                        {question.content}
+                                    </Stack>
+                                    <RadioButtonsGroup 
+                                        choices={question.choices} 
+                                        solvedQuestions={solvedQuestions}
+                                        setSolvedQuestions={setSolvedQuestions}
+                                        isUpdated={isUpdated}
+                                        setIsUpdated={setIsUpdated}
+                                        questionNumber={idx+1}
+                                    >
+                                    </RadioButtonsGroup>
+                                </Stack>
+                                <Stack direction='row' style={{width:'1450px', fontWeight: 'bold', justifyContent:'center'}}>
+                                    {
+                                        question.media.length > 0 ? 
+                                            question.media.map((image, idx) => {
+                                                return(
+                                                    <img key={idx} src={require("../question_images/bimtestimg1.png")} alt="building img" style={{paddingBottom:'50px'}}/>
+                                                );
+                                            }) 
+                                        : <div></div>
+                                    }
+                                </Stack>
+                                
+                            </Stack>
+                        </div>
+                    );
+                })}
             </div>
-            {questions.map((question, idx) => {
-                return(
-                    <div key={idx} className={styles.paperContainer}>
-                        <Stack direction='column' className={styles.questionContainer}>
-                            <h1>Question {idx+1}</h1>
-                            {
-                                question.media.length > 0 ? 
-                                    question.media.map((image, idx) => {
-                                        return(
-                                            <img key={idx} src={require("../question_images/bimtestimg1.png")} alt="building img" style={{paddingBottom:'20px'}}/>
-                                        );
-                                    }) 
-                                : <div style={{paddingBottom:'20px'}}></div>
-                            }
-                            {question.content}
-                            <RadioButtonsGroup choices={question.choices} solvedQuestionCount={solvedQuestionCount} setSolvedQuestionCount={setSolvedQuestionCount}></RadioButtonsGroup>
-                        </Stack>
-                    </div>
-                );
-            })}
-        </div>
+        </>
     );
 }
 export default Paper
