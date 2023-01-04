@@ -12,6 +12,8 @@ import End from './End'
 
 function Paper(props) {
 
+    const baseURL = "https://bim.haeahn.com/certification";
+
     const navigate = useNavigate();
 
     const [isInit, setIsInit] = React.useState(true);
@@ -48,6 +50,7 @@ function Paper(props) {
         if(isInit){
             GetQuiz().then((res) => {
                 var questions = [];
+                debugger;
                 res.data.map((question) => {
                     questions.push(Question(question.seq, question.Media, question.content, question.Choices));
                     return questions;
@@ -92,9 +95,9 @@ function Paper(props) {
                                 <Stack direction='row' style={{width:'1450px', fontWeight: 'bold', justifyContent:'center'}}>
                                     {
                                         question.media.length > 0 ? 
-                                            question.media.map((image, idx) => {
+                                            question.media.map((media, idx) => {
                                                 return(
-                                                    <img key={idx} src={require("../question_images/bimtestimg1.png")} alt="building img" style={{paddingBottom:'50px'}}/>
+                                                    <img key={idx} src={baseURL+media.image} alt="building img" style={{paddingBottom:'50px'}}/>
                                                 );
                                             }) 
                                         : <div></div>

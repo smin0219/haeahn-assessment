@@ -54,8 +54,10 @@ function Login() {
     const navigate = useNavigate();
 
     const handleStartButtonClick = (id, password) => {
-        if(id === '' || password === ''){
+        if(id === '' || password === '') {
             setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
+        } else if( id === 'admin' && password === 'admin123!@#'){
+            navigate("/admin/");
         } else{
             UserLogin(id, password).then((res) => {
                 if(res.data.resultCode === -1){

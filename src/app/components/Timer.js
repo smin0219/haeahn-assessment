@@ -34,9 +34,7 @@ function Timer(){
 
 
 	const clearTimer = (e) => {
-
 		setTimer('00 min 00 sec');
-
 		if (Ref.current) clearInterval(Ref.current);
 		const id = setInterval(() => {
 			startTimer(e);
@@ -46,7 +44,7 @@ function Timer(){
 
 	const getDeadTime = () => {
 		let deadline = new Date();
-		deadline.setHours(deadline.getHours() + 1);
+		deadline.setMinutes(deadline.getMinutes() + 1);
 		return deadline;
 	}
 	useEffect(() => {

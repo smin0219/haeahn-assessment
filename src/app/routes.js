@@ -5,12 +5,14 @@ import Main from './pages/Main';
 import Paper from './pages/Paper';
 import Preparation from './pages/Preparation';
 import End from './pages/End'
+import Admin from './pages/Admin'
 
 export default function Router() {
     const routes = [
         { path: '/404/', element: <Page404 /> },
         { path: '*', element: <Navigate to="/" replace /> },
         { path: '/', element: <Main /> },
+        { path: '/admin', element: <Admin /> },
         { path: '/preparation', element: <Preparation /> },
         { path: '/paper/', element: <Paper/> },
         { path: '/end/', element: <End/> },
