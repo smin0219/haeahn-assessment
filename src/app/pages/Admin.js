@@ -1,33 +1,38 @@
 import * as React from 'react'
 import logoImg from '../images/logo.png';
 import styles from '../styles/Admin.module.css'
-import {Stack, ToggleButton, ToggleButtonGroup, Button, TextField, InputAdornment } from '@mui/material';
+import {
+    Stack, 
+    ToggleButton, 
+    ToggleButtonGroup, 
+    Button, 
+    TextField, 
+    InputAdornment, 
+    CardContent, 
+    Grid,
+    IconButton
+} from '@mui/material';
+import { Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { GetQuiz } from '../data/Data';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import AddIcon from '@mui/icons-material/Add';
+import {
+    CardHeader, 
+    CenterModal, 
+    ModalHeadText, 
+    ModalInput, 
+    ModalLableText, 
+    ModalTextField, 
+    ToggleTextField,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+    TypeButtonGroup, 
+    useModalToggle 
+} from '../Modal/Modal';
 
 function Admin() {
 
-    const CreateButton = styled(Button)`
-        width: 180px;
-        height: 60px;
-        border-radius: 10px;
-        background-color: #004190;
-        color: white;
-        font-size: 15px;
-        font-weight: bold;
-        float: right;
-        margin-left: auto;
-        margin-right: 50px;
-        &:hover,
-        &:active {
-            color: white;
-            background-color: #2196f3;
-        }
-    `;
-
-    const GroupButton = styled(ToggleButton)`
+    const GroupToggleButton = styled(ToggleButton)`
         border-radius: 5px;
         background-color: #B1B1B1;
         color: white;
@@ -74,10 +79,6 @@ function Admin() {
     const [isUpdated, setIsUpdated] = React.useState(false);
     const [group, setGroup] = React.useState('ALL');
 
-    const handleCreateButtonClick = () => {
-        console.log("create button clicked");
-    }
-
     const handleToggleButtonChange = (e) => {
         setGroup(e.target.value);
     }; 
@@ -104,11 +105,7 @@ function Admin() {
                                 <img src={logoImg} alt="logo" />
                             </div>
                             <div className={styles.topNavigationBar}>
-                                <CreateButton
-                                    onClick={() => {handleCreateButtonClick()}}
-                                >
-                                    CREATE QUESTION
-                                </CreateButton>
+                                <OpenModalButton></OpenModalButton>
                             </div>
                         </Stack>
                     </div>
@@ -134,19 +131,17 @@ function Admin() {
                                          <ToggleButtonGroup
                                             onChange={(e) => handleToggleButtonChange(e)}
                                         >
-                                            <GroupButton value='ALL' selected={group==='ALL'} style={{width: "265px", margin:'15px 0 0 0'}}>ALL</GroupButton>
+                                            <GroupToggleButton value='ALL' selected={group==='ALL'} style={{width: "265px", margin:'15px 0 0 0'}}>ALL</GroupToggleButton>
                                         </ToggleButtonGroup>
                                         <Stack direction="row">
                                             <ToggleButtonGroup
                                                 onChange={(e) => handleToggleButtonChange(e)}
                                             >
-                                                <GroupButton value='A' selected={group==='A'} style={{width: "130px", margin:'5px 6px 0 0'}}>A</GroupButton>
-                                                <GroupButton value='B' selected={group==='B'} style={{width: "130px", margin:'5px 0 0 0'}}>B</GroupButton>
+                                                <GroupToggleButton value='A' selected={group==='A'} style={{width: "130px", margin:'5px 6px 0 0'}}>A</GroupToggleButton>
+                                                <GroupToggleButton value='B' selected={group==='B'} style={{width: "130px", margin:'5px 0 0 0'}}>B</GroupToggleButton>
                                             </ToggleButtonGroup>
                                         </Stack>
-                                        
                                     </Stack>
-                                
                             </Stack>
                             
                         </div>
@@ -187,4 +182,205 @@ function Admin() {
         
     );
 }
+
+function OpenModalButton(props){
+
+    const CreateButton = styled(Button)`
+        width: 300px;
+        height: 60px;
+        border-radius: 10px;
+        background-color: #004190;
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        float: right;
+        margin-left: auto;
+        margin-right: 50px;
+        &:hover,
+        &:active {
+            color: white;
+            background-color: #2196f3;
+        }
+    `;
+
+    const CreateQuestionButton = styled(Button)`
+        width: 650px;
+        height: 60px;
+        border-radius: 10px;
+        background-color: lightgrey;
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        float: right;
+        margin-left: auto;
+        margin-right: 50px;
+        &:hover,
+        &:active {
+            color: white;
+            background-color: #2196f3;
+        }
+    `;
+
+    const ModalCard = styled("div")`
+        background-color: #ffffff;
+        border-radius: 10px;
+        width: 830px;
+        overflow-y: scroll;
+        margin: 0 auto;
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    `;
+
+    const GroupToggleButton = styled(ToggleButton)`
+        border-radius: 5px;
+        background-color: lightgrey;
+        color: black;
+        width: 120px;
+        height: 40px;
+        font-size: 15px;
+        margin-right: 5px;
+        float: right;
+        &:hover,
+        &:active {
+            color: white;
+            background-color: #2196f3;
+        };
+        &.MuiToggleButton-root.Mui-selected{
+            color: white;
+            background-color: #004190;
+           
+        };
+    `
+
+    const [selectedGroup, setSelectedGroup] = React.useState('A');
+    const [selectedCategory, setSelectedCategory] = React.useState('인터페이스');
+    const [selectedImages, setSelectedImages]= React.useState([]);
+
+    const { on, open, close } = useModalToggle();
+    const selectedImageRef = React.useRef(null);
+    
+    const handleCreateButtonClick = () => {
+        open();
+        console.log("create button clicked");
+    }
+
+    const handleGroupButtonChange = (e) => {
+        setSelectedGroup(e.target.value);
+    }; 
+
+    const handleCategoryButtonChange = (e) => {
+        setSelectedCategory(e.target.value);
+    }; 
+
+    const handleSelectImageClick = (e) => {
+        selectedImageRef.current.click();
+    };
+
+    const handleSelectedImagesChange = (e) => {
+        let url = [];
+        for(let i=0; i<e.target.files.length; i++){
+            url.push(URL.createObjectURL(e.target.files[i]));
+        }
+        setSelectedImages(url);
+      };
+
+    React.useEffect(() => {
+
+    },[selectedGroup]);
+
+    return(
+        <>
+            <CreateButton
+                onClick={() => {
+                    handleCreateButtonClick();
+                }}
+            >
+                CREATE QUESTION
+            </CreateButton>
+            <CenterModal open={on} onClose={close}>
+                <ModalCard>
+                    <CardHeader direction="row" justifyContent="space-between">
+                        <p style={{padding:'10px 0 0 10px', fontSize:'20px', fontWeight:'550', margin:0}}>CREATE QUESTION</p>
+                    </CardHeader>
+                    <CardContent style={{ padding: 10}}>
+                        <Stack sx={{ p: 6 }}>
+                            <Grid container spacing={3} sx={{ backgroundColor: '#F8FAFB', width:'770px', height:'700px', paddingBottom:'40px', overflowY:'scroll' }}>
+                                <Grid item>
+                                    <ModalLableText sx={{ pt: 2}} >TITLE</ModalLableText>
+                                    <ModalTextField sx={{width: '650px'}} onChange={console.log("change")} size="small"></ModalTextField>
+                                    <Stack direction="row">
+                                        <Stack direction="column">
+                                            <ModalLableText sx={{ pt: 2 }}>GROUP</ModalLableText>
+                                            <Stack direction="row" sx={{ flex: 1, pb: 2 }}>
+                                                <ToggleButtonGroup 
+                                                    onChange={(e) => {handleGroupButtonChange(e)}} 
+                                                    exclusive color="primary"
+                                                >
+                                                    <GroupToggleButton value={'A'} selected={selectedGroup==='A'}>A</GroupToggleButton>
+                                                    <GroupToggleButton value={'B'} selected={selectedGroup==='B'}>B</GroupToggleButton>
+                                                </ToggleButtonGroup>
+                                            </Stack>
+                                            <ModalLableText sx={{ pt: 2 }}>CATEGORY TYPE</ModalLableText>
+                                            <ToggleButtonGroup 
+                                                onChange={(e) => {handleCategoryButtonChange(e)}} 
+                                                exclusive color="primary"
+                                            >
+                                                <GroupToggleButton value={'인터페이스'} selected={selectedCategory==='인터페이스'}>인터페이스</GroupToggleButton>
+                                                <GroupToggleButton value={'모델링'} selected={selectedCategory==='모델링'}>모델링</GroupToggleButton>
+                                                <GroupToggleButton value={'도면화'} selected={selectedCategory==='도면화'}>도면화</GroupToggleButton>
+                                                <GroupToggleButton value={'데이터 활용'} selected={selectedCategory==='데이터 활용'}>데이터 활용</GroupToggleButton>
+                                                <GroupToggleButton value={'협업/관리'} selected={selectedCategory==='협업/관리'}>협업/관리</GroupToggleButton>
+                                            </ToggleButtonGroup>
+                                        </Stack>
+                                    </Stack>
+                                    <ModalLableText sx={{ pt: 5 }}>CHOICES</ModalLableText>
+                                    <Stack direction='row' sx={{width: '650px'}}>
+                                        <div style={{padding:'3px 10px 0 0'}}>(1)</div>
+                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                    </Stack>
+                                    <Stack direction='row' sx={{width: '650px'}}>
+                                        <div style={{padding:'3px 10px 0 0'}}>(2)</div>
+                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                    </Stack>
+                                    <Stack direction='row' sx={{width: '650px'}}>
+                                        <div style={{padding:'3px 10px 0 0'}}>(3)</div>
+                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                    </Stack>
+                                    <Stack direction='row' sx={{width: '650px'}}>
+                                        <div style={{padding:'3px 10px 0 0'}}>(4)</div>
+                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                    </Stack>
+                                    <Stack direction='row' style={{marginTop:'10px'}}>
+                                        <IconButton
+                                            style={{borderStyle:'solid', borderWidth:'1px', borderColor:'darkgrey', width:'50px', height:'50px', margin:'9px 20px 40px 0'}}
+                                            onClick={(e) => {
+                                                handleSelectImageClick(e);
+                                            }}
+                                        >
+                                            <AddIcon />
+                                        </IconButton>
+                                        <ModalLableText sx={{ pt: 3 }}>CLICK HERE TO ADD IMAGES</ModalLableText>
+                                    </Stack>
+                                    
+                                    <input
+                                        type="file"
+                                        ref={selectedImageRef}
+                                        style={{ display: 'none' }}
+                                        onChange={(e) => {
+                                            handleSelectedImagesChange(e);
+                                        }}
+                                    />
+
+                                    <CreateQuestionButton>CLICK HERE TO CREATE A QUESTION</CreateQuestionButton>
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                    </CardContent>
+                </ModalCard>
+            </CenterModal>
+        </>
+    )
+}
+
 export default Admin;
