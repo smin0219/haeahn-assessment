@@ -72,7 +72,7 @@ function Paper(props) {
                 <h2 style={{padding: '0 100px 0 100px'}}>완료된 문제 수: {Object.keys(solvedQuestions).length} / {questions.length} </h2>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
             </Stack>
-            <div style={{ width: 'auto', justifyContent:'center', paddingTop:'70px', backgroundColor:'#F5F5F5'}}>
+            <div style={{ width: 'auto', justifyContent:'center', paddingTop:'100px', backgroundColor:'#F5F5F5'}}>
                 {questions.map((question, idx) => {
                     return(
                         <div key={idx} className={styles.paperContainer}>

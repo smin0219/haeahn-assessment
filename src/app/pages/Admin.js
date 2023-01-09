@@ -10,13 +10,15 @@ import {
     InputAdornment, 
     CardContent, 
     Grid,
-    IconButton
+    IconButton,
+    Box
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
-import { GetQuiz } from '../data/Data';
+import { GetQuiz, SetQuiz } from '../data/Data';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import DeleteIconFilled from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import {
     CardHeader, 
@@ -74,7 +76,6 @@ function Admin() {
         border-radius: 10px;
         color:black;
     `;
-
     const [quiz, setQuiz] = React.useState();
     const [isUpdated, setIsUpdated] = React.useState(false);
     const [group, setGroup] = React.useState('ALL');
@@ -204,16 +205,14 @@ function OpenModalButton(props){
     `;
 
     const CreateQuestionButton = styled(Button)`
-        width: 650px;
+        width: 100%;
         height: 60px;
         border-radius: 10px;
         background-color: lightgrey;
         color: white;
         font-size: 15px;
         font-weight: bold;
-        float: right;
-        margin-left: auto;
-        margin-right: 50px;
+        float:center;
         &:hover,
         &:active {
             color: white;
@@ -224,7 +223,7 @@ function OpenModalButton(props){
     const ModalCard = styled("div")`
         background-color: #ffffff;
         border-radius: 10px;
-        width: 830px;
+        width: 800px;
         overflow-y: scroll;
         margin: 0 auto;
         ::-webkit-scrollbar {
@@ -253,6 +252,10 @@ function OpenModalButton(props){
         };
     `
 
+    const [question, setQuestion] = React.useState(Question());
+
+    const [title, setTitle] = React.useState('');
+    const [choices, setChoices] = React.useState([]);
     const [selectedGroup, setSelectedGroup] = React.useState('A');
     const [selectedCategory, setSelectedCategory] = React.useState('인터페이스');
     const [selectedImages, setSelectedImages]= React.useState([]);
@@ -265,29 +268,51 @@ function OpenModalButton(props){
         console.log("create button clicked");
     }
 
+    const handleTitleOnChange = (e) => {
+        setTitle(e.target.value);
+    }
+
     const handleGroupButtonChange = (e) => {
         setSelectedGroup(e.target.value);
+        question.group = e.target.value;
     }; 
 
     const handleCategoryButtonChange = (e) => {
         setSelectedCategory(e.target.value);
+        question.categoryType = e.target.value;
     }; 
 
-    const handleSelectImageClick = (e) => {
+    const handleAddImageClick = (e) => {
         selectedImageRef.current.click();
     };
 
+    const handleRemoveImageClick = (e) => {
+        setSelectedImages([]);
+    };
+
     const handleSelectedImagesChange = (e) => {
-        let url = [];
+        let images = [];
         for(let i=0; i<e.target.files.length; i++){
-            url.push(URL.createObjectURL(e.target.files[i]));
-        }
-        setSelectedImages(url);
-      };
+            if(i>1){
+                break;
+            }
+            images.push(e.target.files[i]);
+        } 
+        setSelectedImages(images);
+    };
+
+    const handleChoicesOnChange = (e, idx) => {
+        question.choices[idx] = e.target.value;
+        setChoices(question.choices);
+    }
+
+    const handleCreateAQuestionClick = () => {
+        SetQuiz(question);
+    }
 
     React.useEffect(() => {
-
-    },[selectedGroup]);
+        console.log("hjere");
+    },[selectedImages]);
 
     return(
         <>
@@ -305,10 +330,10 @@ function OpenModalButton(props){
                     </CardHeader>
                     <CardContent style={{ padding: 10}}>
                         <Stack sx={{ p: 6 }}>
-                            <Grid container spacing={3} sx={{ backgroundColor: '#F8FAFB', width:'770px', height:'700px', paddingBottom:'40px', overflowY:'scroll' }}>
+                            <Grid container spacing={3} sx={{ backgroundColor: '#F8FAFB', width:'730px', height:'700px', paddingBottom:'40px', overflowY:'scroll' }}>
                                 <Grid item>
                                     <ModalLableText sx={{ pt: 2}} >TITLE</ModalLableText>
-                                    <ModalTextField sx={{width: '650px'}} onChange={console.log("change")} size="small"></ModalTextField>
+                                    <ModalTextField sx={{width: '650px'}} type="text" value={title} onChange={(e) => {handleTitleOnChange(e)}} size="small"></ModalTextField>
                                     <Stack direction="row">
                                         <Stack direction="column">
                                             <ModalLableText sx={{ pt: 2 }}>GROUP</ModalLableText>
@@ -337,42 +362,77 @@ function OpenModalButton(props){
                                     <ModalLableText sx={{ pt: 5 }}>CHOICES</ModalLableText>
                                     <Stack direction='row' sx={{width: '650px'}}>
                                         <div style={{padding:'3px 10px 0 0'}}>(1)</div>
-                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                        <ModalTextField value={choices[1]} onChange={(e) => {handleChoicesOnChange(e, 1)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
                                         <div style={{padding:'3px 10px 0 0'}}>(2)</div>
-                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                        <ModalTextField value={choices[2]} onChange={(e) => {handleChoicesOnChange(e, 2)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
                                         <div style={{padding:'3px 10px 0 0'}}>(3)</div>
-                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                        <ModalTextField value={choices[3]} onChange={(e) => {handleChoicesOnChange(e, 3)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
                                         <div style={{padding:'3px 10px 0 0'}}>(4)</div>
-                                        <ModalTextField onChange={console.log("change")} size="small"></ModalTextField>
+                                        <ModalTextField value={choices[4]} onChange={(e) => {handleChoicesOnChange(e, 4)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' style={{marginTop:'10px'}}>
                                         <IconButton
-                                            style={{borderStyle:'solid', borderWidth:'1px', borderColor:'darkgrey', width:'50px', height:'50px', margin:'9px 20px 40px 0'}}
+                                            style={{borderStyle:'solid', borderWidth:'1px', borderColor:'darkgrey', width:'50px', height:'50px', margin:'9px 15px 40px 0'}}
                                             onClick={(e) => {
-                                                handleSelectImageClick(e);
+                                                handleAddImageClick(e);
                                             }}
                                         >
                                             <AddIcon />
                                         </IconButton>
-                                        <ModalLableText sx={{ pt: 3 }}>CLICK HERE TO ADD IMAGES</ModalLableText>
+                                        <ModalLableText sx={{ pt: 3 }}>ADD IMAGES (maximum number of images: 2)</ModalLableText>
+                                        {selectedImages !== undefined && selectedImages.length > 0 ? 
+                                            <>
+                                                <IconButton
+                                                    style={{borderStyle:'solid', borderWidth:'1px', borderColor:'darkgrey', width:'50px', height:'50px', margin:'10px 15px 40px 40px'}}
+                                                    onClick={(e) => {
+                                                        handleRemoveImageClick(e);
+                                                    }}
+                                                >
+                                                    <DeleteIconFilled/>
+                                                </IconButton>
+                                                <ModalLableText sx={{ pt: 3 }}>REMOVE ALL IMAGES</ModalLableText>
+                                            </>
+                                        : <></>}
                                     </Stack>
-                                    
-                                    <input
-                                        type="file"
-                                        ref={selectedImageRef}
-                                        style={{ display: 'none' }}
-                                        onChange={(e) => {
-                                            handleSelectedImagesChange(e);
-                                        }}
-                                    />
+                                    <Stack direction="column">
+                                        <input
+                                            type="file"
+                                            multiple
+                                            ref={selectedImageRef}
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => {
+                                                handleSelectedImagesChange(e);
+                                            }}
+                                        />
+                                        <Stack direction="row">
 
-                                    <CreateQuestionButton>CLICK HERE TO CREATE A QUESTION</CreateQuestionButton>
+                                            {selectedImages.map((image) => {
+                                                <Box
+                                                    style={{
+                                                        border: '1px solid #DDDDDD',
+                                                        width: '100px',
+                                                        height: '100px',
+                                                        // marginBottom: '50px',
+                                                        marginRight: '10px',
+                                                        borderRadius: '10px'
+                                                    }}>
+                                                    
+                                                        
+                                                    
+                                                </Box>
+                                                return(<img src={URL.createObjectURL(image)} alt="thumbnail" style={{width:'100px', height:'100px', borderRadius:'10px', marginRight:'10px', marginBottom:'50px'}}/>)
+                                            })}
+
+                                            
+                                        </Stack>
+                                        <CreateQuestionButton onClick={() => {handleCreateAQuestionClick()}}>CLICK HERE TO CREATE A QUESTION</CreateQuestionButton>
+                                    </Stack>
                                 </Grid>
                             </Grid>
                         </Stack>
@@ -381,6 +441,22 @@ function OpenModalButton(props){
             </CenterModal>
         </>
     )
+}
+
+function Question(
+    title = '',
+    group = '',
+    categoryType = '',
+    choices = {},
+    images = []
+){
+    return {
+        title: title,
+        group: group,
+        categoryType: categoryType,
+        choices: choices,
+        images: images
+    }
 }
 
 export default Admin;
