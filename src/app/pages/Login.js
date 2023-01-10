@@ -86,6 +86,9 @@ function Login() {
                             setPreviousId(res.data[0].seq);
                             dialogOpen();
                         }
+                        else{
+                            handleNewQuizClick();
+                        }
                     })
                     
                 }

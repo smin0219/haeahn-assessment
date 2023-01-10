@@ -27,6 +27,8 @@ function Timer(props){
 				(minutes > 9 ? minutes : '0' + minutes) + "분 "
 				+ (seconds > 9 ? seconds : '0' + seconds) + "초"
 			)
+		}else{
+			props.setIsEnd(true);
 		}
 	}
 

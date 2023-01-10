@@ -9,6 +9,11 @@ import {GetQuiz, GetStartQuiz} from '../data/Data';
 import logoImg from '../images/logo.png';
 import Timer from '../components/Timer'
 import End from './End'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function Paper(props) {
     const baseURL = "https://bim.haeahn.com/certification";
@@ -16,13 +21,13 @@ function Paper(props) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [isInit, setIsInit] = React.useState(true);
+    const [isEnd, setIsEnd] = React.useState(false);
     const [isUpdated, setIsUpdated]= React.useState(false);
     const [questions, setQuestions] = React.useState([]);
     const [solvedQuestions, setSolvedQuestions] = React.useState({});
     const [testInfo, setTestInfo] = React.useState(location.state.testInfo);
     const [givenTime, setGivenTime] = React.useState(location.state.testInfo.given_time);
-
+    const [open, setOpen] = React.useState(false);
 
     const SubmitButton = styled(Button)`
         width: 180px;
@@ -41,24 +46,54 @@ function Paper(props) {
     `;
 
     const handleSubmitButtonClick = () => {
+        dialogOpen();
+    }
+
+    const handleConfirmButtonClick = () => {
         navigate("/end/", {
             state: {
                 employeeId: testInfo.user_id
             },
         });
+        dialogClose(false);
     }
 
+    const handleCancelButtonClick = () => {
+        dialogClose(false);
+    }
+
+    const dialogOpen = () => {
+        setOpen(true);
+    };
+
+    const dialogClose = () => {
+        setOpen(false);
+    };
+
     React.useEffect(() => {
+        if(isEnd){
+            navigate("/end/", {
+                state: {
+                    employeeId: testInfo.user_id
+                },
+            });
+        }
         GetQuiz(testInfo.seq).then((res) => {
             var questions = [];
-            res.data.map((question) => {
+            res.data.map((question, idx) => {
+                let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
+                if(alreadySolved.length > 0){
+                    let questions = solvedQuestions;
+                    questions[idx+1] = alreadySolved[0].content;
+                    setSolvedQuestions(solvedQuestions);
+                }
+                
                 questions.push(Question(question.seq, question.Media, question.content, question.Choices));
                 return questions;
             })
             setQuestions(questions);
-            setIsInit(false);
         });
-    },[solvedQuestions.length, isUpdated, testInfo.seq])
+    },[solvedQuestions.length, isUpdated, testInfo.seq, isEnd])
 
     return(
         <>
@@ -66,7 +101,7 @@ function Paper(props) {
                 {/* <img src={logoImg} style={{width: 'auto', height: '40px'}} alt="logo" /> */}
                 <h2 style={{paddingRight:"5px"}}>남은 시간:</h2>
                 <div style={{paddingLeft:'3px'}}></div>
-                <Timer givenTime={givenTime}/>
+                <Timer givenTime={givenTime} setIsEnd={setIsEnd}/>
                 <h2 style={{padding: '0 100px 0 100px'}}>완료된 문제 수: {Object.keys(solvedQuestions).length} / {questions.length} </h2>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
             </Stack>
@@ -108,6 +143,27 @@ function Paper(props) {
                     );
                 })}
             </div>
+            <Dialog
+                open={open}
+                onClose={dialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"제출 하시겠습니까?"}
+                </DialogTitle>
+                <DialogContent>
+                    {"완료된 문제 수: " + Object.keys(solvedQuestions).length + '/' + questions.length}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => {handleConfirmButtonClick()}} autoFocus>
+                        제출
+                    </Button>
+                    <Button onClick={() => {handleCancelButtonClick()}}>
+                        취소
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

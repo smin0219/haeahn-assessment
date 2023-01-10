@@ -8,7 +8,6 @@ import {SetChoose} from '../data/Data';
 
 
 function RadioButtonsGroup(props) {
-
   const handleButtonClicked = (e) => {
     var solvedQuestions = props.solvedQuestions;
     solvedQuestions[props.questionNumber] = e.target.value;
@@ -30,18 +29,18 @@ function RadioButtonsGroup(props) {
         name="radio-buttons-group"
       >
         {props.questionInfo.choices !== undefined ? props.questionInfo.choices.map((choice, idx) => {
-            return (
-                <FormControlLabel 
-                    key={idx}
-                    checked={choice.selected}
-                    value={choice.content}
-                    control={<Radio />}
-                    label={choice.content}
-                    onClick={(e) => { 
-                      handleButtonClicked(e) 
-                    }}
-                />
-            )
+          return (
+              <FormControlLabel 
+                  key={idx}
+                  checked={choice.selected}
+                  value={choice.content}
+                  control={<Radio />}
+                  label={choice.content}
+                  onClick={(e) => { 
+                    handleButtonClicked(e) 
+                  }}
+              />
+          )
         }) : <></> }
       </RadioGroup>
     </FormControl>

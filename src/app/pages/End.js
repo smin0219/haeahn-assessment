@@ -37,7 +37,7 @@ function End(){
                 >
                     <div style={endContainerStyle}>
                         <div style={endStyle}>
-                            <div style={{textAlign:'center', fontSize:'25px', paddingTop:'100px'}}>제출이 완료되었습니다.</div> 
+                            <div style={{textAlign:'center', fontSize:'25px', paddingTop:'100px'}}>테스트가 완료되었습니다.</div> 
                             <div style={{textAlign:'center', fontSize:'25px', paddingTop:'10px' }}>수고하셨습니다.</div> 
                         </div>
                     </div>
