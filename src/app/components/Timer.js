@@ -7,7 +7,6 @@ function Timer(){
 	// The state for our timer
 	const [timer, setTimer] = useState();
 
-
 	const getTimeRemaining = (e) => {
 		const total = Date.parse(e) - Date.parse(new Date());
 		const seconds = Math.floor((total / 1000) % 60);
@@ -18,12 +17,11 @@ function Timer(){
 		};
 	}
 
-
 	const startTimer = (e) => {
 		let { total, hours, minutes, seconds }
 					= getTimeRemaining(e);
 		if (total >= 0) {
-
+			minutes += hours * 60;
 			setTimer(
 				// (hours > 9 ? hours : '0' + hours) + "시간 " +
 				(minutes > 9 ? minutes : '0' + minutes) + "분 "
@@ -31,7 +29,6 @@ function Timer(){
 			)
 		}
 	}
-
 
 	const clearTimer = (e) => {
 		setTimer('00 min 00 sec');
@@ -44,9 +41,10 @@ function Timer(){
 
 	const getDeadTime = () => {
 		let deadline = new Date();
-		deadline.setMinutes(deadline.getMinutes() + 1);
+		deadline.setMinutes(deadline.getMinutes() + 90);
 		return deadline;
 	}
+
 	useEffect(() => {
 		clearTimer(getDeadTime());
 	}, []);

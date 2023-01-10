@@ -66,7 +66,7 @@ function Login() {
                 else{
                     navigate("/preparation/", {
                         state: {
-                            id: id
+                            employeeId: res.data.resultMessage
                         },
                     });
                 }

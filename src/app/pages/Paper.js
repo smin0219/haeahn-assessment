@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import RadioButtonsGroup from '../components/RadioButton';
 import Question from '../models/Question';
 import styles from '../styles/Paper.module.css'
 import { styled } from '@mui/material/styles';
 import {Stack, TextField, Button, Input} from '@mui/material';
-import {UserLogin, GetQuiz} from '../data/Data';
+import {GetQuiz, GetStartQuiz} from '../data/Data';
 import logoImg from '../images/logo.png';
 import Timer from '../components/Timer'
 import End from './End'
@@ -15,11 +15,14 @@ function Paper(props) {
     const baseURL = "https://bim.haeahn.com/certification";
 
     const navigate = useNavigate();
+    const location = useLocation();
 
+    const [employeeId, setEmployeeId] = React.useState(location.state.employeeId);
     const [isInit, setIsInit] = React.useState(true);
     const [isUpdated, setIsUpdated]= React.useState(false);
     const [questions, setQuestions] = React.useState([]);
     const [solvedQuestions, setSolvedQuestions] = React.useState({});
+    const [testInfo, setTestInfo] = React.useState({});
 
 
     const SubmitButton = styled(Button)`
@@ -41,7 +44,7 @@ function Paper(props) {
     const handleSubmitButtonClick = () => {
         navigate("/end/", {
             state: {
-                id: props.id
+                employeeId: employeeId
             },
         });
     }
@@ -50,17 +53,18 @@ function Paper(props) {
         if(isInit){
             GetQuiz().then((res) => {
                 var questions = [];
-                debugger;
                 res.data.map((question) => {
                     questions.push(Question(question.seq, question.Media, question.content, question.Choices));
                     return questions;
                 })
                 setQuestions(questions);
                 setIsInit(false);
+                GetStartQuiz(employeeId).then((res) => {
+                    setTestInfo(res.data[0]);
+                })
             });
         }
-
-    },[solvedQuestions.length, isInit, isUpdated])
+    },[solvedQuestions.length, isInit, isUpdated, employeeId])
 
     return(
         <>
@@ -88,7 +92,8 @@ function Paper(props) {
                                         setSolvedQuestions={setSolvedQuestions}
                                         isUpdated={isUpdated}
                                         setIsUpdated={setIsUpdated}
-                                        questionNumber={idx+1}
+                                        questionInfo={question}
+                                        testInfo={testInfo}
                                     >
                                     </RadioButtonsGroup>
                                 </Stack>

@@ -26,11 +26,11 @@ export const GetQuiz = () => {
     }
 }
 
-export const SetQuiz = (questionModel) => {
+export const SetQuiz = (quizModel) => {
     try {
         let formData = new FormData();
-        Object.keys(questionModel).forEach(function (key) {
-          formData.append(key, questionModel[key]);
+        Object.keys(quizModel).forEach(function (key) {
+          formData.append(key, quizModel[key]);
         });
         return axios.post(baseURL + 'set-quiz', formData);
     } catch (error) {
@@ -38,14 +38,36 @@ export const SetQuiz = (questionModel) => {
     }
 }
 
+export const GetStartQuiz = (user_id) => {
+    try{
+        return axios.post(baseURL + 'start-quiz', null, {
+            params: {
+                user_id,
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const SetChoose = (user_id, test_id, quiz_id, choose_id) => {
+    try{
+        return axios.post(baseURL + 'choose-quiz', null, {
+            params: {
+                user_id,
+                test_id,
+                quiz_id,
+                choose_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const DownloadFile = (url, filename) => {
     try{
         fileDownload(url, filename);
-        // axios.get(url, {
-        //     responseType: 'blob'
-        // }).then((res) => {
-        //     fileDownload(res.data, filename);
-        // });
     }
     catch(error) {
         console.error(error);

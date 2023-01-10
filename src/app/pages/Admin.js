@@ -312,7 +312,7 @@ function OpenModalButton(props){
 
     React.useEffect(() => {
         console.log("hjere");
-    },[selectedImages]);
+    },[]);
 
     return(
         <>
@@ -333,7 +333,7 @@ function OpenModalButton(props){
                             <Grid container spacing={3} sx={{ backgroundColor: '#F8FAFB', width:'730px', height:'700px', paddingBottom:'40px', overflowY:'scroll' }}>
                                 <Grid item>
                                     <ModalLableText sx={{ pt: 2}} >TITLE</ModalLableText>
-                                    <ModalTextField sx={{width: '650px'}} type="text" value={title} onChange={(e) => {handleTitleOnChange(e)}} size="small"></ModalTextField>
+                                    <ModalTextField sx={{width: '650px'}} type="text" onBlur={(e) => {handleTitleOnChange(e)}} size="small"></ModalTextField>
                                     <Stack direction="row">
                                         <Stack direction="column">
                                             <ModalLableText sx={{ pt: 2 }}>GROUP</ModalLableText>
