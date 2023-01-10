@@ -51,11 +51,11 @@ function Information(props) {
         setDownloaded(true);
     }
 
-    const handleStartButtonClick = (employeeId) => {
+    const handleStartButtonClick = () => {
         if(downloaded){
             navigate("/paper/", {
                 state: {
-                    employeeId: employeeId
+                    testInfo: props.testInfo
                 },
             });
         }
@@ -83,7 +83,7 @@ function Information(props) {
                     </Stack>
                     <Stack direction="column" style={{width: '80%', marginLeft:'10%', textAlign:'center', placeItems:'center'}}>
                         <h3>2. 시험 준비가 완료되면 아래의 버튼을 눌러 시험을 시작하십시오.</h3>
-                        <StyledButton onClick={() => {handleStartButtonClick(props.employeeId)}}>시험 시작</StyledButton>
+                        <StyledButton onClick={() => {handleStartButtonClick()}}>시험 시작</StyledButton>
                     </Stack>
                     <Stack direction="column" style={{width: '80%', marginLeft:'10%', textAlign:'center', placeItems:'center'}}>
                         <h4 style={{color: 'red', paddingTop:'15px'}}>{warning}</h4>

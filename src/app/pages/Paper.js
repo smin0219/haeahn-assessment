@@ -11,18 +11,17 @@ import Timer from '../components/Timer'
 import End from './End'
 
 function Paper(props) {
-
     const baseURL = "https://bim.haeahn.com/certification";
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [employeeId, setEmployeeId] = React.useState(location.state.employeeId);
     const [isInit, setIsInit] = React.useState(true);
     const [isUpdated, setIsUpdated]= React.useState(false);
     const [questions, setQuestions] = React.useState([]);
     const [solvedQuestions, setSolvedQuestions] = React.useState({});
-    const [testInfo, setTestInfo] = React.useState({});
+    const [testInfo, setTestInfo] = React.useState(location.state.testInfo);
+    const [givenTime, setGivenTime] = React.useState(location.state.testInfo.given_time);
 
 
     const SubmitButton = styled(Button)`
@@ -44,27 +43,22 @@ function Paper(props) {
     const handleSubmitButtonClick = () => {
         navigate("/end/", {
             state: {
-                employeeId: employeeId
+                employeeId: testInfo.user_id
             },
         });
     }
 
     React.useEffect(() => {
-        if(isInit){
-            GetQuiz().then((res) => {
-                var questions = [];
-                res.data.map((question) => {
-                    questions.push(Question(question.seq, question.Media, question.content, question.Choices));
-                    return questions;
-                })
-                setQuestions(questions);
-                setIsInit(false);
-                GetStartQuiz(employeeId).then((res) => {
-                    setTestInfo(res.data[0]);
-                })
-            });
-        }
-    },[solvedQuestions.length, isInit, isUpdated, employeeId])
+        GetQuiz(testInfo.seq).then((res) => {
+            var questions = [];
+            res.data.map((question) => {
+                questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                return questions;
+            })
+            setQuestions(questions);
+            setIsInit(false);
+        });
+    },[solvedQuestions.length, isUpdated, testInfo.seq])
 
     return(
         <>
@@ -72,7 +66,7 @@ function Paper(props) {
                 {/* <img src={logoImg} style={{width: 'auto', height: '40px'}} alt="logo" /> */}
                 <h2 style={{paddingRight:"5px"}}>남은 시간:</h2>
                 <div style={{paddingLeft:'3px'}}></div>
-                <Timer/>
+                <Timer givenTime={givenTime}/>
                 <h2 style={{padding: '0 100px 0 100px'}}>완료된 문제 수: {Object.keys(solvedQuestions).length} / {questions.length} </h2>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
             </Stack>
@@ -87,12 +81,12 @@ function Paper(props) {
                                         {question.content}
                                     </Stack>
                                     <RadioButtonsGroup 
-                                        choices={question.choices} 
                                         solvedQuestions={solvedQuestions}
                                         setSolvedQuestions={setSolvedQuestions}
                                         isUpdated={isUpdated}
                                         setIsUpdated={setIsUpdated}
                                         questionInfo={question}
+                                        questionNumber={idx+1}
                                         testInfo={testInfo}
                                     >
                                     </RadioButtonsGroup>

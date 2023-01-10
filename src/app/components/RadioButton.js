@@ -4,6 +4,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import {SetChoose} from '../data/Data';
 
 
 function RadioButtonsGroup(props) {
@@ -12,7 +13,13 @@ function RadioButtonsGroup(props) {
     var solvedQuestions = props.solvedQuestions;
     solvedQuestions[props.questionNumber] = e.target.value;
     props.setSolvedQuestions(solvedQuestions);
-    props.setIsUpdated(!props.isUpdated);
+    
+    if(e.target.value !== undefined){
+      let chooseId = props.questionInfo.choices.filter((choice) => choice.content === e.target.value)[0].seq;
+      SetChoose(props.testInfo.user_id, props.testInfo.seq, props.questionInfo.id, chooseId).then((res) => {
+        props.setIsUpdated(!props.isUpdated);
+      });
+    }
   }
 
   return (
@@ -22,12 +29,13 @@ function RadioButtonsGroup(props) {
         aria-labelledby="demo-radio-buttons-group-label"
         name="radio-buttons-group"
       >
-        {props.choices !== undefined ? props.choices.map((choice, idx) => {
+        {props.questionInfo.choices !== undefined ? props.questionInfo.choices.map((choice, idx) => {
             return (
                 <FormControlLabel 
                     key={idx}
+                    checked={choice.selected}
                     value={choice.content}
-                    control={<Radio />} 
+                    control={<Radio />}
                     label={choice.content}
                     onClick={(e) => { 
                       handleButtonClicked(e) 

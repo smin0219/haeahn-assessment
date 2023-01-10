@@ -10,7 +10,6 @@ import {Paper} from '@mui/material';
 function Preparation(){
 
     const location = useLocation();
-    const employeeId = location.state.employeeId;
 
     return (
         <>
@@ -22,7 +21,7 @@ function Preparation(){
                         height: "calc(100vh - 72px)",
                     }}
                 >
-                    <Information employeeId={employeeId}/>
+                    <Information testInfo={location.state.testInfo}/>
                 </Paper>
             </div>
             <div style={{float:'right', padding:'10px 30px 0 0'}}>

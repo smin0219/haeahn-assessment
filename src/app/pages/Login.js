@@ -2,8 +2,13 @@ import * as React from "react";
 import { useNavigate } from 'react-router-dom';
 import {Stack, TextField, Button, Input} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {UserLogin} from '../data/Data'
+import {GetPreviousTest, UserLogin, StartNewQuiz, StartContinueQuiz} from '../data/Data'
 import Preparation from "./Preparation";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const loginContainer = {
     display: 'flex', 
@@ -50,8 +55,19 @@ function Login() {
     const [id, setId] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [failureMessage, setFailureMessage] = React.useState("");
+    const [open, setOpen] = React.useState(false);
+    const [employeeId, setEmployeeId] = React.useState("");
+    const [previousId, setPreviousId] = React.useState("");
 
     const navigate = useNavigate();
+
+    const dialogOpen = () => {
+        setOpen(true);
+      };
+    
+      const dialogClose = () => {
+        setOpen(false);
+      };
 
     const handleStartButtonClick = (id, password) => {
         if(id === '' || password === '') {
@@ -64,14 +80,37 @@ function Login() {
                     setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
                 }
                 else{
-                    navigate("/preparation/", {
-                        state: {
-                            employeeId: res.data.resultMessage
-                        },
-                    });
+                    setEmployeeId(res.data.resultMessage);
+                    GetPreviousTest(res.data.resultMessage).then((res) => {
+                        if(res.data.length > 0){
+                            setPreviousId(res.data[0].seq);
+                            dialogOpen();
+                        }
+                    })
+                    
                 }
             });
         }
+    }
+
+    const handleNewQuizClick = ()=>{
+        StartNewQuiz(employeeId).then((res) => {
+            navigate("/preparation/", {
+                state: {
+                    testInfo: res.data[0]
+                },
+            });
+        })
+    }
+
+    const handleContinueQuizClick = ()=>{
+        StartContinueQuiz(employeeId, previousId).then((res) => {
+            navigate("/paper/", {
+                state: {
+                    testInfo: res.data[0]
+                },
+            });
+        })
     }
 
     React.useEffect(()=>{
@@ -125,6 +164,30 @@ function Login() {
                     </Stack>
                 </Stack>
             </div>
+            <Dialog
+                open={open}
+                onClose={dialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+            <DialogTitle id="alert-dialog-title">
+                {"진행 중이던 테스트가 있습니다. 이어서 하시겠습니까?"}
+            </DialogTitle>
+            <DialogContent>
+                {/* <DialogContentText id="alert-dialog-description">
+                    Let Google help apps determine location. This means sending anonymous
+                    location data to Google, even when no apps are running.
+                </DialogContentText> */}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => {handleContinueQuizClick()}} autoFocus>
+                    이어서 시작
+                </Button>
+                <Button onClick={() => {handleNewQuizClick()}}>
+                    새로 시작
+                </Button>
+            </DialogActions>
+            </Dialog>
         </div>
     );
 }

@@ -17,9 +17,26 @@ export const UserLogin = (id, password) => {
     }
 }
 
-export const GetQuiz = () => {
+export const GetPreviousTest = (user_id) => {
     try{
-        return axios.post("https://bimapi.haeahn.com/api/BIMQuiz/quiz");
+        return axios.post(baseURL + 'previous-test', null, {
+            params: {
+                user_id
+            },
+        });
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+
+export const GetQuiz = (test_id) => {
+    try{
+        return axios.post(baseURL + 'quiz', null, {
+            params: {
+                test_id,
+            },
+        });
     }
     catch(error) {
         console.error(error);
@@ -38,11 +55,25 @@ export const SetQuiz = (quizModel) => {
     }
 }
 
-export const GetStartQuiz = (user_id) => {
+export const StartNewQuiz = (user_id) => {
     try{
-        return axios.post(baseURL + 'start-quiz', null, {
+        return axios.post(baseURL + 'start-new-quiz', null, {
             params: {
                 user_id,
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const StartContinueQuiz = (user_id, previous_id) => {
+    debugger;
+    try{
+        return axios.post(baseURL + 'start-continue-quiz', null, {
+            params: {
+                user_id,
+                previous_id
             },
           });
     } catch (error) {

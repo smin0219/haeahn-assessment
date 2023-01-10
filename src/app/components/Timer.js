@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 
-function Timer(){
+function Timer(props){
 	const Ref = useRef(null);
 
 	// The state for our timer
@@ -41,7 +41,7 @@ function Timer(){
 
 	const getDeadTime = () => {
 		let deadline = new Date();
-		deadline.setMinutes(deadline.getMinutes() + 90);
+		deadline.setMinutes(deadline.getMinutes() + props.givenTime);
 		return deadline;
 	}
 
