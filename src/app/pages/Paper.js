@@ -5,7 +5,7 @@ import Question from '../models/Question';
 import styles from '../styles/Paper.module.css'
 import { styled } from '@mui/material/styles';
 import {Stack, TextField, Button, Input} from '@mui/material';
-import {GetQuiz, GetStartQuiz} from '../data/Data';
+import {GetQuiz, GetStartQuiz, GetEndQuiz, GetPreviousTest} from '../data/Data';
 import logoImg from '../images/logo.png';
 import Timer from '../components/Timer'
 import End from './End'
@@ -50,6 +50,7 @@ function Paper(props) {
     }
 
     const handleConfirmButtonClick = () => {
+        GetEndQuiz(testInfo.user_id, testInfo.seq);
         navigate("/end/", {
             state: {
                 employeeId: testInfo.user_id
@@ -71,28 +72,39 @@ function Paper(props) {
     };
 
     React.useEffect(() => {
+        debugger;
         if(isEnd){
             navigate("/end/", {
                 state: {
                     employeeId: testInfo.user_id
                 },
             });
-        }
-        GetQuiz(testInfo.seq).then((res) => {
-            var questions = [];
-            res.data.map((question, idx) => {
-                let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
-                if(alreadySolved.length > 0){
-                    let questions = solvedQuestions;
-                    questions[idx+1] = alreadySolved[0].content;
-                    setSolvedQuestions(solvedQuestions);
+        } else{
+            debugger;
+            GetPreviousTest(testInfo.user_id).then((res) => {
+                debugger;
+                if(res.data.length > 0){
+                    GetQuiz(testInfo.seq).then((res) => {
+                        var questions = [];
+                        res.data.map((question, idx) => {
+                            let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
+                            if(alreadySolved.length > 0){
+                                let questions = solvedQuestions;
+                                questions[idx+1] = alreadySolved[0].content;
+                                setSolvedQuestions(solvedQuestions);
+                            }
+                            
+                            questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                            return questions;
+                        })
+                        setQuestions(questions);
+                    });
                 }
-                
-                questions.push(Question(question.seq, question.Media, question.content, question.Choices));
-                return questions;
+                else{
+                    navigate("/");
+                }
             })
-            setQuestions(questions);
-        });
+        }
     },[solvedQuestions.length, isUpdated, testInfo.seq, isEnd])
 
     return(

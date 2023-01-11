@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation} from 'react-router-dom'
 import logoImg from '../images/logo.png';
 import backgroundImg from '../images/background.png';
 import styles from '../styles/App.module.css';
@@ -21,7 +21,7 @@ function Preparation(){
                         height: "calc(100vh - 72px)",
                     }}
                 >
-                    <Information testInfo={location.state.testInfo}/>
+                    <Information employeeId={location.state.employeeId}/>
                 </Paper>
             </div>
             <div style={{float:'right', padding:'10px 30px 0 0'}}>

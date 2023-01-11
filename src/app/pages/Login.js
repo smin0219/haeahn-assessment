@@ -56,18 +56,17 @@ function Login() {
     const [password, setPassword] = React.useState("");
     const [failureMessage, setFailureMessage] = React.useState("");
     const [open, setOpen] = React.useState(false);
-    const [employeeId, setEmployeeId] = React.useState("");
     const [previousId, setPreviousId] = React.useState("");
 
     const navigate = useNavigate();
 
     const dialogOpen = () => {
         setOpen(true);
-      };
+    };
     
-      const dialogClose = () => {
+    const dialogClose = () => {
         setOpen(false);
-      };
+    };
 
     const handleStartButtonClick = (id, password) => {
         if(id === '' || password === '') {
@@ -80,8 +79,10 @@ function Login() {
                     setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
                 }
                 else{
-                    setEmployeeId(res.data.resultMessage);
+                    
+                    sessionStorage.setItem("employeeId", res.data.resultMessage);
                     GetPreviousTest(res.data.resultMessage).then((res) => {
+                        debugger;
                         if(res.data.length > 0){
                             setPreviousId(res.data[0].seq);
                             dialogOpen();
@@ -90,24 +91,34 @@ function Login() {
                             handleNewQuizClick();
                         }
                     })
-                    
                 }
             });
         }
     }
 
     const handleNewQuizClick = ()=>{
-        StartNewQuiz(employeeId).then((res) => {
-            navigate("/preparation/", {
-                state: {
-                    testInfo: res.data[0]
-                },
-            });
-        })
+        // let employeeId = sessionStorage.getItem("employeeId");
+        debugger;
+        navigate("/preparation/", {
+            state: {
+                employeeId: sessionStorage.getItem("employeeId")
+            }
+        });
+        // , {
+        //     state: {
+        //         testInfo: res.data[0]
+        //     },
+        // });
+        // StartNewQuiz(employeeId).then((res) => {
+        //     sessionStorage.setItem("previousId", res.data[0].seq);
+            
+        // })
     }
 
     const handleContinueQuizClick = ()=>{
+        let employeeId = sessionStorage.getItem("employeeId");
         StartContinueQuiz(employeeId, previousId).then((res) => {
+            debugger;
             navigate("/paper/", {
                 state: {
                     testInfo: res.data[0]
@@ -139,7 +150,7 @@ function Login() {
                                     autoComplete: "off",
                                     placeholder:"HUB ID"
                                 }}
-                                onBlur={(e) => setId(e.target.value)}
+                                onChange={(e) => setId(e.target.value)}
                             >
                             </LoginTextField >
                             <span style={{fontSize:"20px", paddingTop:"5px", paddingLeft:"5px"}}>@haeahn.com</span>
@@ -155,7 +166,7 @@ function Login() {
                                 autoComplete: "off",
                                 placeholder:"HUB Password"
                             }}
-                            onBlur={(e) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         >
                         </PasswordTextField>
                         <div style={{color:"red", textAlign:"center", width: "430px", height: "15px", paddingTop:"40px"}}>{failureMessage}</div>
@@ -174,20 +185,14 @@ function Login() {
                 aria-describedby="alert-dialog-description"
             >
             <DialogTitle id="alert-dialog-title">
-                {"진행 중이던 테스트가 있습니다. 이어서 하시겠습니까?"}
+                {"알림"}
             </DialogTitle>
             <DialogContent>
-                {/* <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending anonymous
-                    location data to Google, even when no apps are running.
-                </DialogContentText> */}
+                {"진행 중이던 테스트가 있습니다. 이어서 하시려면 아래의 버튼을 눌러주세요."}
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => {handleContinueQuizClick()}} autoFocus>
-                    이어서 시작
-                </Button>
-                <Button onClick={() => {handleNewQuizClick()}}>
-                    새로 시작
+                    이어서 시작하기
                 </Button>
             </DialogActions>
             </Dialog>
