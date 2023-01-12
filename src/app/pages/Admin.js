@@ -55,21 +55,6 @@ function Admin() {
            
         };
     `
-
-    const QuestionCommon = styled('div')`
-        position:relative;
-        display:block;
-        margin:0;
-        white-space:nowrap;
-        overflow:hidden;
-        text-align: center;
-        text-overflow: ellipsis;
-    `;
-
-    const QuestionButton = styled(Button)`
-        color:black;
-    `;
-
     const [isUpdated, setIsUpdated] = React.useState(false);
     const [quiz, setQuiz] = React.useState();
     const [group, setGroup] = React.useState('ALL');
@@ -103,7 +88,6 @@ function Admin() {
     const handleCreateButtonClick = (question) => {
         setCurrentQuestion(question);
         open();
-        console.log('create button clicked');
     };
 
     const handleDeleteClick = async (question) => {
@@ -113,7 +97,6 @@ function Admin() {
 
     return(
         <>
-            <OpenModalButtonEdit question={currentQuestion} on={on} open={open} close={close} />
             <div className={styles.adminContainer}>
                 <Stack direction="column" style={{width:'100%', padding:0, margin:0}}>
                     <div style={{borderStyle: "solid", borderWidth: "0 0 4px 0", borderColor: '#F1F1F1', width:'100%', margin:'0', padding:'0'}}>
@@ -288,6 +271,7 @@ function OpenModalButton(props){
     const [selectedGroup, setSelectedGroup] = React.useState('A');
     const [selectedCategory, setSelectedCategory] = React.useState('인터페이스');
     const [selectedImages, setSelectedImages]= React.useState([]);
+    const [answer, setAnswer] = React.useState(1);
 
     const { on, open, close } = useModalToggle();
     const selectedImageRef = React.useRef(null);
@@ -331,23 +315,18 @@ function OpenModalButton(props){
 
     const handleChoicesOnChange = (e, idx) => {
         question.Choices[idx] = e.target.value;
-        // setChoices(question.choices);
     }
 
     const handleCreateAQuestionClick = () => {
-        let medias = [];
-        for (let i = 0; i < selectedImages.length; i++) {
-            medias.push(Media(selectedImages[i]));
-        }
-    
-        question.Media = medias;
-        question.group = selectedGroup;
-        question.categoryType = selectedCategory;
-        SetQuiz2(question);
+        SetQuiz(question);
+    }
+
+    const handleAnswerClick = (e, idx) => {
+        debugger;
+        setAnswer(idx);
     }
 
     React.useEffect(() => {
-        debugger;
         console.log("hjere");
     },[]);
 
@@ -398,19 +377,19 @@ function OpenModalButton(props){
                                     </Stack>
                                     <ModalLableText sx={{ pt: 5 }}>CHOICES</ModalLableText>
                                     <Stack direction='row' sx={{width: '650px'}}>
-                                        <div style={{padding:'3px 10px 0 0'}}>(1)</div>
+                                        <div style={{padding:'3px 10px 0 0'}}><Radio checked={answer===1} value={1} onChange={(e) => handleAnswerClick(e, 1)}></Radio></div>
                                         <ModalTextField defaultValue={question.Choices[1]} onChange={(e) => {handleChoicesOnChange(e, 1)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
-                                        <div style={{padding:'3px 10px 0 0'}}>(2)</div>
+                                        <div style={{padding:'3px 10px 0 0'}}><Radio checked={answer===2} onChange={(e) => handleAnswerClick(e, 2)}></Radio></div>
                                         <ModalTextField defaultValue={question.Choices[2]} onChange={(e) => {handleChoicesOnChange(e, 2)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
-                                        <div style={{padding:'3px 10px 0 0'}}>(3)</div>
+                                        <div style={{padding:'3px 10px 0 0'}}><Radio checked={answer===3} onChange={(e) => handleAnswerClick(e, 3)}></Radio></div>
                                         <ModalTextField defaultValue={question.Choices[3]} onChange={(e) => {handleChoicesOnChange(e, 3)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' sx={{width: '650px'}}>
-                                        <div style={{padding:'3px 10px 0 0'}}>(4)</div>
+                                        <div style={{padding:'3px 10px 0 0'}}><Radio checked={answer===4} onChange={(e) => handleAnswerClick(e, 4)}></Radio></div>
                                         <ModalTextField defaultValue={question.Choices[4]} onChange={(e) => {handleChoicesOnChange(e, 4)}} size="small"></ModalTextField>
                                     </Stack>
                                     <Stack direction='row' style={{marginTop:'10px'}}>
@@ -480,393 +459,6 @@ function OpenModalButton(props){
     )
 }
 
-function OpenModalButtonEdit(props) {
-    const EditQuestionButton = styled(Button)`
-      width: 100%;
-      height: 60px;
-      border-radius: 10px;
-      background-color: lightgrey;
-      color: white;
-      font-size: 15px;
-      font-weight: bold;
-      float: center;
-      &:hover,
-      &:active {
-        color: white;
-        background-color: #2196f3;
-      }
-    `;
-  
-    const ModalCard = styled('div')`
-      background-color: #ffffff;
-      border-radius: 10px;
-      width: 800px;
-      overflow-y: scroll;
-      margin: 0 auto;
-      ::-webkit-scrollbar {
-        display: none;
-      }
-    `;
-  
-    const GroupToggleButton = styled(ToggleButton)`
-      border-radius: 5px;
-      background-color: lightgrey;
-      color: black;
-      width: 120px;
-      height: 40px;
-      font-size: 15px;
-      margin-right: 5px;
-      float: right;
-      &:hover,
-      &:active {
-        color: white;
-        background-color: #2196f3;
-      }
-      &.MuiToggleButton-root.Mui-selected {
-        color: white;
-        background-color: #004190;
-      }
-    `;
-  
-    const [question, setQuestion] = React.useState();
-    const [content, setContent] = React.useState('');
-    const [choices, setChoices] = React.useState();
-    const [selectedGroup, setSelectedGroup] = React.useState('');
-    const [selectedCategory, setSelectedCategory] = React.useState('');
-    const [selectedImages, setSelectedImages] = React.useState([]);
-    const [selectedValue, setSelectedValue] = React.useState('');
-  
-    const selectedImageRef = React.useRef(null);
-  
-    const handleChange = (event) => {
-      setSelectedValue(event.target.value);
-      //console.log(event.target.value);
-    };
-  
-    const handleContentOnChange = (e) => {
-      setContent(e.target.value);
-      //question.content = e.target.value;
-    };
-  
-    const handleGroupButtonChange = (e) => {
-      setSelectedGroup(e.target.value);
-      //question.group = e.target.value;
-    };
-  
-    const handleCategoryButtonChange = (e) => {
-      setSelectedCategory(e.target.value);
-      //question.categoryType = e.target.value;
-    };
-  
-    const handleAddImageClick = (e) => {
-      selectedImageRef.current.click();
-    };
-  
-    const handleRemoveImageClick = (e) => {
-      setSelectedImages([]);
-      //question.Media = [];
-    };
-  
-    const handleSelectedImagesChange = (e) => {
-      let images = [];
-      let medias = [];
-      for (let i = 0; i < e.target.files.length; i++) {
-        if (i > 1) {
-          break;
-        }
-        images.push(e.target.files[i]);
-        medias.push(Media(e.target.files[i]));
-      }
-      setSelectedImages(images);
-    };
-  
-    const handleChoicesOnChange = (e, idx) => {
-      question.Choices[idx].content = e.target.value;
-      setChoices(question.Choices);
-    };
-  
-    const handleEditAQuestionClick = () => {
-        debugger;
-      let medias = [];
-      for (let i = 0; i < selectedImages.length; i++) {
-        medias.push(Media(selectedImages[i]));
-      }
-  
-      question.Media = medias;
-      question.Choices = choices;
-      question.content = content;
-      question.group = selectedGroup;
-      question.categoryType = selectedCategory;
-
-      SetQuiz(question);
-      props.close();
-    };
-  
-    React.useEffect(() => {
-      setQuestion(props.question);
-      setContent(props.question.content);
-      setSelectedGroup(props.question.group);
-      setSelectedCategory(props.question.category);
-      setChoices(props.question.Choices);
-      setSelectedImages(props.question.Media ?? props.question.Media);
-      console.log(props.question);
-    }, [props.question]);
-  
-    React.useEffect(() => {
-      if (props.question.Choices === null || props.question.Choices === undefined) {
-        return;
-      }
-      var choose_seq = '';
-      for (let index = 0; index < props.question.Choices.length; index++) {
-        const element = props.question.Choices[index];
-        if (element.is_correct) {
-          choose_seq = '' + index + '';
-          break;
-        }
-      }
-      setSelectedValue(choose_seq);
-    }, [props.question.Choices]);
-  
-    return (
-      <>
-        <CenterModal open={props.on} onClose={props.close}>
-          <ModalCard>
-            <CardHeader direction="row" justifyContent="space-between">
-              <p style={{ padding: '10px 0 0 10px', fontSize: '20px', fontWeight: '550', margin: 0 }}>EDIT QUESTION</p>
-            </CardHeader>
-            <CardContent style={{ padding: 10 }}>
-              <Stack sx={{ p: 6 }}>
-                <Grid
-                  container
-                  spacing={3}
-                  sx={{
-                    backgroundColor: '#F8FAFB',
-                    width: '730px',
-                    height: '700px',
-                    paddingBottom: '40px',
-                    overflowY: 'scroll',
-                  }}>
-                  <Grid item>
-                    <ModalLableText sx={{ pt: 2 }}>TITLE</ModalLableText>
-                    <ModalTextField
-                      sx={{ width: '650px' }}
-                      rows={5}
-                      type="text"
-                      multiline
-                      defaultValue={props.question.content}
-                      onBlur={(e) => {
-                        handleContentOnChange(e);
-                      }}
-                      size="small"></ModalTextField>
-                    <Stack direction="row">
-                      <Stack direction="column">
-                        <ModalLableText sx={{ pt: 2 }}>GROUP</ModalLableText>
-                        <Stack direction="row" sx={{ flex: 1, pb: 2 }}>
-                          <ToggleButtonGroup
-                            onChange={(e) => {
-                              handleGroupButtonChange(e);
-                            }}
-                            exclusive
-                            color="primary">
-                            <GroupToggleButton value={'A'} selected={selectedGroup === 'A'}>
-                              A
-                            </GroupToggleButton>
-                            <GroupToggleButton value={'B'} selected={selectedGroup === 'B'}>
-                              B
-                            </GroupToggleButton>
-                          </ToggleButtonGroup>
-                        </Stack>
-                        <ModalLableText sx={{ pt: 2 }}>CATEGORY TYPE</ModalLableText>
-                        <ToggleButtonGroup
-                          onChange={(e) => {
-                            handleCategoryButtonChange(e);
-                          }}
-                          exclusive
-                          color="primary">
-                          <GroupToggleButton value={'인터페이스'} selected={selectedCategory === '인터페이스'}>
-                            인터페이스
-                          </GroupToggleButton>
-                          <GroupToggleButton value={'모델링'} selected={selectedCategory === '모델링'}>
-                            모델링
-                          </GroupToggleButton>
-                          <GroupToggleButton value={'도면화'} selected={selectedCategory === '도면화'}>
-                            도면화
-                          </GroupToggleButton>
-                          <GroupToggleButton value={'데이터 활용'} selected={selectedCategory === '데이터 활용'}>
-                            데이터 활용
-                          </GroupToggleButton>
-                          <GroupToggleButton value={'협업/관리'} selected={selectedCategory === '협업/관리'}>
-                            협업/관리
-                          </GroupToggleButton>
-                        </ToggleButtonGroup>
-                      </Stack>
-                    </Stack>
-                    <ModalLableText sx={{ pt: 5 }}>CHOICES</ModalLableText>
-  
-                    <Stack direction="row" sx={{ width: '650px' }}>
-                      <div style={{ padding: '3px 10px 0 0' }}>(1)</div>
-                      <ModalTextField
-                        defaultValue={choices?.length > 0 ? choices[0].content : ''}
-                        onChange={(e) => {
-                          handleChoicesOnChange(e, 0);
-                        }}
-                        size="small"></ModalTextField>
-                      <Radio
-                        checked={selectedValue === '0'}
-                        onChange={handleChange}
-                        value={0}
-                        name="radio-buttons"
-                        inputProps={{ number: 0 }}
-                      />
-                    </Stack>
-                    <Stack direction="row" sx={{ width: '650px' }}>
-                      <div style={{ padding: '3px 10px 0 0' }}>(2)</div>
-                      <ModalTextField
-                        defaultValue={choices?.length > 0 ? choices[1].content : ''}
-                        onChange={(e) => {
-                          handleChoicesOnChange(e, 1);
-                        }}
-                        size="small"></ModalTextField>
-                      <Radio
-                        checked={selectedValue === '1'}
-                        onChange={handleChange}
-                        value={1}
-                        name="radio-buttons"
-                        inputProps={{ number: 1 }}
-                      />
-                    </Stack>
-                    <Stack direction="row" sx={{ width: '650px' }}>
-                      <div style={{ padding: '3px 10px 0 0' }}>(3)</div>
-                      <ModalTextField
-                        defaultValue={choices?.length > 0 ? choices[2].content : ''}
-                        onChange={(e) => {
-                          handleChoicesOnChange(e, 2);
-                        }}
-                        size="small"></ModalTextField>
-                      <Radio
-                        checked={selectedValue === '2'}
-                        onChange={handleChange}
-                        value={2}
-                        name="radio-buttons"
-                        inputProps={{ number: 2 }}
-                      />
-                    </Stack>
-                    <Stack direction="row" sx={{ width: '650px' }}>
-                      <div style={{ padding: '3px 10px 0 0' }}>(4)</div>
-                      <ModalTextField
-                        defaultValue={choices?.length > 0 ? choices[3].content : ''}
-                        onChange={(e) => {
-                          handleChoicesOnChange(e, 3);
-                        }}
-                        size="small"></ModalTextField>
-                      <Radio
-                        checked={selectedValue === '3'}
-                        onChange={handleChange}
-                        value={3}
-                        name="radio-buttons"
-                        inputProps={{ number: 3 }}
-                      />
-                    </Stack>
-                    <Stack direction="row" style={{ marginTop: '10px' }}>
-                      <IconButton
-                        style={{
-                          borderStyle: 'solid',
-                          borderWidth: '1px',
-                          borderColor: 'darkgrey',
-                          width: '50px',
-                          height: '50px',
-                          margin: '9px 15px 40px 0',
-                        }}
-                        onClick={(e) => {
-                          handleAddImageClick(e);
-                        }}>
-                        <AddIcon />
-                      </IconButton>
-                      <ModalLableText sx={{ pt: 3 }}>ADD IMAGES (maximum number of images: 2)</ModalLableText>
-                      {selectedImages !== undefined && selectedImages.length > 0 ? (
-                        <>
-                          <IconButton
-                            style={{
-                              borderStyle: 'solid',
-                              borderWidth: '1px',
-                              borderColor: 'darkgrey',
-                              width: '50px',
-                              height: '50px',
-                              margin: '10px 15px 40px 40px',
-                            }}
-                            onClick={(e) => {
-                              handleRemoveImageClick(e);
-                            }}>
-                            <DeleteIconFilled />
-                          </IconButton>
-                          <ModalLableText sx={{ pt: 3 }}>REMOVE ALL IMAGES</ModalLableText>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </Stack>
-                    <Stack direction="column">
-                      <input
-                        type="file"
-                        multiple
-                        ref={selectedImageRef}
-                        style={{ display: 'none' }}
-                        onChange={(e) => {
-                          handleSelectedImagesChange(e);
-                        }}
-                      />
-                      <Stack direction="row">
-                        {selectedImages !== undefined && selectedImages.length > 0 ? (
-                          selectedImages.map((image) => {
-                            <Box
-                              key={image.image}
-                              style={{
-                                border: '1px solid #DDDDDD',
-                                width: '100px',
-                                height: '100px',
-                                // marginBottom: '50px',
-                                marginRight: '10px',
-                                borderRadius: '10px',
-                              }}></Box>;
-                            return (
-                              <img
-                                src={
-                                  image.image
-                                    ? 'https://bim.haeahn.com/certification' + image.image
-                                    : URL.createObjectURL(image)
-                                }
-                                alt="thumbnail"
-                                style={{
-                                  width: '200px',
-                                  height: '200px',
-                                  borderRadius: '10px',
-                                  marginRight: '10px',
-                                  marginBottom: '50px',
-                                }}
-                              />
-                            );
-                          })
-                        ) : (
-                          <></>
-                        )}
-                      </Stack>
-                      <EditQuestionButton
-                        onClick={() => {
-                          handleEditAQuestionClick();
-                        }}>
-                        CLICK HERE TO EDIT A QUESTION
-                      </EditQuestionButton>
-                    </Stack>
-                  </Grid>
-                </Grid>
-              </Stack>
-            </CardContent>
-          </ModalCard>
-        </CenterModal>
-      </>
-    );
-  }
-
 function Question(
     seq = '',
     author = '',
@@ -900,14 +492,5 @@ function Question(
         choose: choose
     }
 }
-
-function Media(file = null, image = '', link = '') {
-    return {
-      file: file,
-      image: image,
-      link: link,
-    };
-  }
-  
 
 export default Admin;
