@@ -278,7 +278,13 @@ function OpenModalButton(props){
     const selectedImageRef = React.useRef(null);
     
     const handleCreateButtonClick = () => {
+        debugger;
         setQuestion(Question());
+        setChoices({});
+        setSelectedGroup('A');
+        setSelectedCategory('인터페이스');
+        setSelectedImages([]);
+        setSelectedFiles([]);
         open();
     }
 
@@ -335,6 +341,8 @@ function OpenModalButton(props){
         Object.keys(choices).forEach((key,idx) => {
             choiceList[idx] = Choice(-1,0,choices[key]);
         })
+
+        choiceList[answer-1].is_correct = true;
         
         SetQuiz(question).then((res) => {
             SetQuizChoices(choiceList, res.data);

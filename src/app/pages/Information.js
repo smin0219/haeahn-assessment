@@ -49,7 +49,7 @@ function Information(props) {
 
     const navigate = useNavigate();
     const handleDowloadButtonClick = () => {
-        var url = "https://bim.haeahn.com/certification/files/Revit.zip";
+        var url = "https://bim.haeahn.com/certification/files/BIM평가모델-2023신입.zip";
         window.location.href=url;
     }
 
@@ -102,14 +102,17 @@ function Information(props) {
                         <Stack direction="row">
                             <h1 style={{width: '100%', paddingTop:'50px', paddingBottom:'30px', textAlign:'center'}}>Haeahn BIM Assessment Test</h1>
                         </Stack>
-                        <Stack direction="column" style={{width: '80%', marginLeft:'10%', paddingTop:'40px', paddingBottom:'50px', textAlign:'left'}}>
+                        <Stack direction="column" style={{width: '80%', marginLeft:'10%', paddingBottom:'20px', textAlign:'left'}}>
                             <h3>* 시험 시간은 90분이며, 총 25개의 문향으로 구성되어 있습니다.</h3>
                             <h3>* 최종 제출 후에는 답안 변경이 불가능합니다.</h3>
                             <h3>* 출제 문항과 제공되는 문제파일의 외부 유출 및 무단 사용 등 보안에 유의해주시기 바랍니다.</h3>
                         </Stack>
                         <Stack direction="column" style={{width: '80%', marginLeft:'10%', paddingBottom:'30px', textAlign:'center', placeItems:'center'}}>
                             <h3>1. 아래의 파일을 다운 받아 문제풀이에 참고하십시오.</h3>
-                            <StyledButton onClick={() => {handleDowloadButtonClick()}}>문제파일 다운로드</StyledButton>
+                            <span>압축 파일에는 '15_역량평가 문제파일.rvt', '해안신관 구조모델_230102', </span>
+                            <span>’HAEAHN BIM TEMPLATE_EWG Export_건축.txt’ 3개의 파일이 포함되어 있습니다.</span>
+                            <span>시험 시작 전, 파일을 다운 받은 후 압축을 풀어 건축, 구조 파일이 한 폴더에 위치하는지 확인하세요.</span>
+                            <StyledButton style={{marginTop:'30px'}} onClick={() => {handleDowloadButtonClick()}}>문제파일 다운로드</StyledButton>
                         </Stack>
                         <Stack direction="column" style={{width: '80%', marginLeft:'10%', textAlign:'center', placeItems:'center'}}>
                             <h3>2. 시험 준비가 완료되면 아래의 버튼을 눌러 시험을 시작하십시오.</h3>

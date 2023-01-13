@@ -26,7 +26,7 @@ function Paper(props) {
     const [questions, setQuestions] = React.useState([]);
     const [solvedQuestions, setSolvedQuestions] = React.useState({});
     const [testInfo, setTestInfo] = React.useState(location.state.testInfo);
-    const [givenTime, setGivenTime] = React.useState(location.state.testInfo.given_time);
+    const [givenTime, setGivenTime] = React.useState(90);
     const [open, setOpen] = React.useState(false);
 
     const SubmitButton = styled(Button)`
@@ -71,6 +71,12 @@ function Paper(props) {
         setOpen(false);
     };
 
+    const getTimer = () => {
+        return (
+            <Timer givenTime={givenTime} setIsEnd={setIsEnd}/>
+        )
+    }
+
     React.useEffect(() => {
         if(isEnd){
             navigate("/end/", {
@@ -80,6 +86,7 @@ function Paper(props) {
             });
         } else{
             GetPreviousTest(testInfo.user_id).then((res) => {
+                setGivenTime(res.data[0].given_time);
                 if(res.data.length > 0){
                     GetQuiz(testInfo.seq).then((res) => {
                         var questions = [];
@@ -102,7 +109,7 @@ function Paper(props) {
                 }
             })
         }
-    },[solvedQuestions.length, isUpdated, testInfo.seq, isEnd])
+    },[solvedQuestions.length, isUpdated, testInfo.seq, isEnd, givenTime])
 
     return(
         <>
@@ -110,7 +117,7 @@ function Paper(props) {
                 {/* <img src={logoImg} style={{width: 'auto', height: '40px'}} alt="logo" /> */}
                 <h2 style={{paddingRight:"5px"}}>남은 시간:</h2>
                 <div style={{paddingLeft:'3px'}}></div>
-                <Timer givenTime={givenTime} setIsEnd={setIsEnd}/>
+                {getTimer()}
                 <h2 style={{padding: '0 100px 0 100px'}}>완료된 문제 수: {Object.keys(solvedQuestions).length} / {questions.length} </h2>
                 <SubmitButton onClick={() => {handleSubmitButtonClick()}}>SUBMIT</SubmitButton>
             </Stack>
@@ -121,7 +128,7 @@ function Paper(props) {
                             <Stack direction='column' className={styles.questionContainer}>
                                 <Stack direction='column' style={{padding:'30px 30px 50px 30px'}}>
                                     <Stack direction='row' style={{fontSize:'18px', paddingBottom:'20px'}}>
-                                        {idx+1 + " "}.
+                                        {idx+1 + ". "}
                                         {question.content}
                                     </Stack>
                                     <RadioButtonsGroup 

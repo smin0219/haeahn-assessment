@@ -2,8 +2,8 @@ import * as React from "react";
 import axios from "axios";
 import fileDownload from "js-file-download";
 
-let baseURL = "http://localhost:5059/api/BIMQuiz/";
-// let baseURL = "https://bimapi.haeahn.com/api/BIMQuiz/"
+// let baseURL = "http://localhost:5059/api/BIMQuiz/";
+let baseURL = "https://bimapi.haeahn.com/api/BIMQuiz/"
 
 export const UserLogin = (id, password) => {
     try{

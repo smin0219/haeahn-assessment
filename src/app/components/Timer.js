@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from 'react'
 
 function Timer(props){
 	const Ref = useRef(null);
-
 	// The state for our timer
 	const [timer, setTimer] = useState();
 
@@ -49,7 +48,7 @@ function Timer(props){
 
 	useEffect(() => {
 		clearTimer(getDeadTime());
-	}, []);
+	}, [props.givenTime]);
 
 	return (
 		<div className="Timer">
