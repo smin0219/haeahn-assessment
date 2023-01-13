@@ -82,7 +82,6 @@ function Login() {
                     
                     sessionStorage.setItem("employeeId", res.data.resultMessage);
                     GetPreviousTest(res.data.resultMessage).then((res) => {
-                        debugger;
                         if(res.data.length > 0){
                             setPreviousId(res.data[0].seq);
                             dialogOpen();
@@ -98,7 +97,6 @@ function Login() {
 
     const handleNewQuizClick = ()=>{
         // let employeeId = sessionStorage.getItem("employeeId");
-        debugger;
         navigate("/preparation/", {
             state: {
                 employeeId: sessionStorage.getItem("employeeId")

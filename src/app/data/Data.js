@@ -75,7 +75,6 @@ export const SetQuizChoices = (choices, quiz_id) => {
 
 
 export const SetQuizMedia = (files, quiz_id) => {
-    debugger;
     try{
         let formData = new FormData();
         files.forEach(item => {

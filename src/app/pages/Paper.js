@@ -22,6 +22,7 @@ function Paper(props) {
     const location = useLocation();
 
     const [isEnd, setIsEnd] = React.useState(false);
+    const [isInit, setIsInit] = React.useState(true);
     const [isUpdated, setIsUpdated]= React.useState(false);
     const [questions, setQuestions] = React.useState([]);
     const [solvedQuestions, setSolvedQuestions] = React.useState({});
@@ -85,31 +86,51 @@ function Paper(props) {
                 },
             });
         } else{
-            GetPreviousTest(testInfo.user_id).then((res) => {
-                setGivenTime(res.data[0].given_time);
-                if(res.data.length > 0){
-                    GetQuiz(testInfo.seq).then((res) => {
-                        var questions = [];
-                        res.data.map((question, idx) => {
-                            let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
-                            if(alreadySolved.length > 0){
-                                let questions = solvedQuestions;
-                                questions[idx+1] = alreadySolved[0].content;
-                                setSolvedQuestions(solvedQuestions);
-                            }
-                            
-                            questions.push(Question(question.seq, question.Media, question.content, question.Choices));
-                            return questions;
-                        })
-                        setQuestions(questions);
-                    });
-                }
-                else{
-                    navigate("/");
-                }
-            })
+            if(isInit){
+                GetPreviousTest(testInfo.user_id).then((res) => {
+                    setGivenTime(res.data[0].given_time);
+                    if(res.data.length > 0){
+                        GetQuiz(testInfo.seq).then((res) => {
+                            var questions = [];
+                            res.data.map((question, idx) => {
+                                let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
+                                if(alreadySolved.length > 0){
+                                    let questions = solvedQuestions;
+                                    questions[idx+1] = alreadySolved[0].content;
+                                    setSolvedQuestions(solvedQuestions);
+                                }
+                                
+                                questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                                return questions;
+                            })
+                            setQuestions(questions);
+                        });
+                    }
+                    else{
+                        navigate("/");
+                    }
+                })
+                setIsInit(false);
+            }
+            else{
+                GetQuiz(testInfo.seq).then((res) => {
+                    var questions = [];
+                    res.data.map((question, idx) => {
+                        let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
+                        if(alreadySolved.length > 0){
+                            let questions = solvedQuestions;
+                            questions[idx+1] = alreadySolved[0].content;
+                            setSolvedQuestions(solvedQuestions);
+                        }
+                        
+                        questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                        return questions;
+                    })
+                    setQuestions(questions);
+                });
+            }
         }
-    },[solvedQuestions.length, isUpdated, testInfo.seq, isEnd, givenTime])
+    },[solvedQuestions.length, isInit,isUpdated, testInfo.seq, isEnd, givenTime])
 
     return(
         <>
