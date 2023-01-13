@@ -44,23 +44,10 @@ export const GetQuiz = (test_id) => {
 }
 
 export const SetQuiz = (quizModel) => {
-    debugger;
-    try {
-        return axios.post(baseURL + 'set-quiz', JSON.stringify(quizModel), {
-        headers: {
-            'Content-Type': `application/json`,
-        },
-        });
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-export const SetQuiz2 = (quizModel) => {
     try {
         let formData = new FormData();
         Object.keys(quizModel).forEach(function (key) {
-          formData.append(key, quizModel[key]);
+            formData.append(key, quizModel[key]);
         });
         return axios.post(baseURL + 'set-quiz', formData);
       } catch (error) {
@@ -68,6 +55,38 @@ export const SetQuiz2 = (quizModel) => {
       }
 };
 
+export const SetQuizChoices = (choices, quiz_id) => {
+    try{
+        let choiceList = [];
+        Object.keys(choices).forEach((key) => {
+            choices[key].quiz_id = quiz_id;
+            choiceList.push(choices[key]);
+        });
+
+        return axios.post(baseURL + 'set-quiz-choices', JSON.stringify(choiceList), {
+            headers: {
+              'Content-Type': `application/json`,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+export const SetQuizMedia = (files, quiz_id) => {
+    debugger;
+    try{
+        let formData = new FormData();
+        files.forEach(item => {
+            formData.append('files', item);
+        })
+        formData.append('quiz_id', quiz_id);
+        return axios.post(baseURL + 'set-quiz-media',formData);
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 export const DelQuiz = (quiz_id) => {
 try {

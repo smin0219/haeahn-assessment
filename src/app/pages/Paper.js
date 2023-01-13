@@ -72,7 +72,6 @@ function Paper(props) {
     };
 
     React.useEffect(() => {
-        debugger;
         if(isEnd){
             navigate("/end/", {
                 state: {
@@ -80,9 +79,7 @@ function Paper(props) {
                 },
             });
         } else{
-            debugger;
             GetPreviousTest(testInfo.user_id).then((res) => {
-                debugger;
                 if(res.data.length > 0){
                     GetQuiz(testInfo.seq).then((res) => {
                         var questions = [];
