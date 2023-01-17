@@ -73,6 +73,7 @@ function Login() {
     const [openContinueDialog, setOpenContinueDialog] = React.useState(false);
     const [openNewDialog, setOpenNewDialog] = React.useState(false);
     const [previousId, setPreviousId] = React.useState("");
+    const [userInfo, setUserInfo] = React.useState({});
 
     const navigate = useNavigate();
 
@@ -104,7 +105,7 @@ function Login() {
                         setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
                     }
                     else{
-                        
+                        setUserInfo(res.data);
                         sessionStorage.setItem("employeeId", res.data.resultMessage);
                         GetPreviousTest(res.data.resultMessage).then((res) => {
                             if(res.data.length > 0){
@@ -132,9 +133,11 @@ function Login() {
     }
 
     const handleResultClick = () => {
+        debugger;
         navigate("/result/", {
             state: {
-                employeeId: sessionStorage.getItem("employeeId")
+                id: id,
+                userInfo: userInfo
             }
         });
     }
