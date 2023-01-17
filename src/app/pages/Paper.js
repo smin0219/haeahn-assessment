@@ -80,6 +80,7 @@ function Paper(props) {
 
     React.useEffect(() => {
         if(isEnd){
+            GetEndQuiz(testInfo.user_id, testInfo.seq);
             navigate("/end/", {
                 state: {
                     employeeId: testInfo.user_id
@@ -88,27 +89,33 @@ function Paper(props) {
         } else{
             if(isInit){
                 GetPreviousTest(testInfo.user_id).then((res) => {
-                    setGivenTime(res.data[0].given_time);
-                    if(res.data.length > 0){
-                        GetQuiz(testInfo.seq).then((res) => {
-                            var questions = [];
-                            res.data.map((question, idx) => {
-                                let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
-                                if(alreadySolved.length > 0){
-                                    let questions = solvedQuestions;
-                                    questions[idx+1] = alreadySolved[0].content;
-                                    setSolvedQuestions(solvedQuestions);
-                                }
-                                
-                                questions.push(Question(question.seq, question.Media, question.content, question.Choices));
-                                return questions;
-                            })
-                            setQuestions(questions);
-                        });
+                    if(res.data.length === 0){
+                        navigate("/end/");
                     }
                     else{
-                        navigate("/");
+                        setGivenTime(res.data[0].given_time);
+                        if(res.data.length > 0){
+                            GetQuiz(testInfo.seq).then((res) => {
+                                var questions = [];
+                                res.data.map((question, idx) => {
+                                    let alreadySolved = (question.Choices.filter((choice) => choice.selected === true))
+                                    if(alreadySolved.length > 0){
+                                        let questions = solvedQuestions;
+                                        questions[idx+1] = alreadySolved[0].content;
+                                        setSolvedQuestions(solvedQuestions);
+                                    }
+                                    
+                                    questions.push(Question(question.seq, question.Media, question.content, question.Choices));
+                                    return questions;
+                                })
+                                setQuestions(questions);
+                            });
+                        }
+                        else{
+                            navigate("/");
+                        }
                     }
+                    
                 })
                 setIsInit(false);
             }

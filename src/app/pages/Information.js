@@ -109,7 +109,7 @@ function Information(props) {
                         </Stack>
                         <Stack direction="column" style={{width: '80%', marginLeft:'10%', paddingBottom:'30px', textAlign:'center', placeItems:'center'}}>
                             <h3>1. 아래의 파일을 다운 받아 문제풀이에 참고하십시오.</h3>
-                            <span style={{fontSize:'15px'}}>- 압축 파일에는 '15_역량평가 문제파일.rvt', '해안신관 구조모델_230102', ’HAEAHN BIM TEMPLATE_EWG Export_건축.txt’ 3개의 파일이 포함되어 있습니다. </span>
+                            <span style={{fontSize:'15px'}}>- 압축 파일에는 '15_역량평가 문제파일.rvt', '해안신관 구조모델_230102.rvt', ’HAEAHN BIM TEMPLATE_DWG Export_건축.txt’ 3개의 파일이 포함되어 있습니다. </span>
                             <span style={{fontSize:'15px'}}>- 파일을 다운 받은 후 압축을 풀어 '15_역량평가 문제파일.rvt', '해안신관 구조모델_230102.rvt' 파일이 한 폴더에 위치하는지 확인하세요.</span>
                             <span style={{fontSize:'15px'}}>- 시험 시작 전, '15_역량평가 문제파일.rvt' 파일을 열어  '해안신관 구조모델_230102.rvt' 링크가 제대로 되어 있는 지 확인 후, 시험을 시작하세요.</span>
                             <StyledButton style={{marginTop:'30px'}} onClick={() => {handleDowloadButtonClick()}}>문제파일 다운로드</StyledButton>

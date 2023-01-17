@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Result from './Result';
 
 const loginContainer = {
     display: 'flex', 
@@ -51,21 +52,44 @@ const StartButton = styled(Button)`
     }
 `;
 
+const NewButton = styled(Button)`
+    width: 500px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: lightgrey;
+    color: black;
+    font-size: 20px;
+    &:hover,
+    &:active {
+        color: white;
+        background-color: #2196f3;
+    }
+`;
+
 function Login() {
     const [id, setId] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [failureMessage, setFailureMessage] = React.useState("");
-    const [open, setOpen] = React.useState(false);
+    const [openContinueDialog, setOpenContinueDialog] = React.useState(false);
+    const [openNewDialog, setOpenNewDialog] = React.useState(false);
     const [previousId, setPreviousId] = React.useState("");
 
     const navigate = useNavigate();
 
-    const dialogOpen = () => {
-        setOpen(true);
+    const dialogNewOpen = () => {
+        setOpenNewDialog(true);
     };
     
-    const dialogClose = () => {
-        setOpen(false);
+    const dialogNewClose = () => {
+        setOpenNewDialog(false);
+    };
+
+    const dialogContinueOpen = () => {
+        setOpenContinueDialog(true);
+    };
+    
+    const dialogContinueClose = () => {
+        setOpenContinueDialog(false);
     };
 
     const handleStartButtonClick = (id, password) => {
@@ -74,43 +98,45 @@ function Login() {
         } else if( id === 'admin' && password === 'admin123!@#'){
             navigate("/admin/");
         } else{
-            UserLogin(id, password).then((res) => {
-                if(res.data.resultCode === -1){
-                    setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
-                }
-                else{
-                    
-                    sessionStorage.setItem("employeeId", res.data.resultMessage);
-                    GetPreviousTest(res.data.resultMessage).then((res) => {
-                        if(res.data.length > 0){
-                            setPreviousId(res.data[0].seq);
-                            dialogOpen();
-                        }
-                        else{
-                            handleNewQuizClick();
-                        }
-                    })
-                }
-            });
+            if(id==='sj.min' || id==='dh.lee2' || id==='jaehkim' || id==='yj.lee'){
+                UserLogin(id, password).then((res) => {
+                    if(res.data.resultCode === -1){
+                        setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
+                    }
+                    else{
+                        
+                        sessionStorage.setItem("employeeId", res.data.resultMessage);
+                        GetPreviousTest(res.data.resultMessage).then((res) => {
+                            if(res.data.length > 0){
+                                setPreviousId(res.data[0].seq);
+                                dialogContinueOpen();
+                            }
+                            else{
+                                dialogNewOpen();
+                            }
+                        });
+                    }
+                });  
+            }else{
+                setFailureMessage('평가 기간이 아닙니다');
+            }
         }
     }
 
-    const handleNewQuizClick = ()=>{
-        // let employeeId = sessionStorage.getItem("employeeId");
+    const handleNewQuizClick = () => {
         navigate("/preparation/", {
             state: {
                 employeeId: sessionStorage.getItem("employeeId")
             }
         });
-        // , {
-        //     state: {
-        //         testInfo: res.data[0]
-        //     },
-        // });
-        // StartNewQuiz(employeeId).then((res) => {
-        //     sessionStorage.setItem("previousId", res.data[0].seq);
-            
-        // })
+    }
+
+    const handleResultClick = () => {
+        navigate("/result/", {
+            state: {
+                employeeId: sessionStorage.getItem("employeeId")
+            }
+        });
     }
 
     const handleContinueQuizClick = ()=>{
@@ -177,8 +203,25 @@ function Login() {
                 </Stack>
             </div>
             <Dialog
-                open={open}
-                onClose={dialogClose}
+                open={openNewDialog}
+                onClose={dialogNewClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <Stack direction='row'>
+                        <NewButton onClick={() => {handleNewQuizClick()}}  style={{marginRight:'50px'}} autoFocus>
+                            새 평가 시작
+                        </NewButton>
+                        <NewButton onClick={() => {handleResultClick()}} autoFocus>
+                            평가 결과 조회
+                        </NewButton>
+                    </Stack>
+                </DialogContent>
+            </Dialog>
+            <Dialog
+                open={openContinueDialog}
+                onClose={dialogContinueClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
