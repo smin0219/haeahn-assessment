@@ -99,28 +99,24 @@ function Login() {
         } else if( id === 'admin' && password === 'admin123!@#'){
             navigate("/admin/");
         } else{
-            if(id==='sj.min' || id==='dh.lee2' || id==='jaehkim' || id==='yj.lee'){
-                UserLogin(id, password).then((res) => {
-                    if(res.data.resultCode === -1){
-                        setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
-                    }
-                    else{
-                        setUserInfo(res.data);
-                        sessionStorage.setItem("employeeId", res.data.resultMessage);
-                        GetPreviousTest(res.data.resultMessage).then((res) => {
-                            if(res.data.length > 0){
-                                setPreviousId(res.data[0].seq);
-                                dialogContinueOpen();
-                            }
-                            else{
-                                dialogNewOpen();
-                            }
-                        });
-                    }
-                });  
-            }else{
-                setFailureMessage('평가 기간이 아닙니다');
-            }
+            UserLogin(id, password).then((res) => {
+                if(res.data.resultCode === -1){
+                    setFailureMessage("사용자 이름 또는 암호가 올바르지 않습니다.");
+                }
+                else{
+                    setUserInfo(res.data);
+                    sessionStorage.setItem("employeeId", res.data.resultMessage);
+                    GetPreviousTest(res.data.resultMessage).then((res) => {
+                        if(res.data.length > 0){
+                            setPreviousId(res.data[0].seq);
+                            dialogContinueOpen();
+                        }
+                        else{
+                            dialogNewOpen();
+                        }
+                    });
+                }
+            });  
         }
     }
 
