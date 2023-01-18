@@ -78,7 +78,7 @@ function Paper(props) {
         )
     }
 
-    React.useEffect(() => {
+    React.useEffect(() =>  {
         if(isEnd){
             GetEndQuiz(testInfo.user_id, testInfo.seq);
             navigate("/end/", {
