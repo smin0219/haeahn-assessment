@@ -29,6 +29,9 @@ function Result(props) {
     const location = useLocation();
     const profileImg = "https://hub.haeahn.com/Storage/GW/ImageStorage/Employee/" + location.state.id + ".jpg";
 
+    const [id, setId] = React.useState(location.state.id);
+    const [userInfo, setUserInfo] = React.useState(location.state.userInfo);
+
     React.useEffect(() => {
         RadarChart();
         BarChart();
@@ -49,13 +52,13 @@ function Result(props) {
                 <div className={styles.resultContainer}>
                     <div className={styles.profileContainer}>
                         <h2 className={styles.title}>Haeahn BIM Assessment Test Results</h2>
-                        <Stack direction='row' style={{alignItems:'center', margin:'55px 0 0 0', paddingLeft:'80px'}}>
+                        <Stack direction='row' style={{alignItems:'center', margin:'50px 0 0 0', paddingLeft:'80px'}}>
                             <img src={profileImg} className={styles.profileImg} alt='profile'></img>
                             <Stack direction='row'>
                                 <Stack direction='column' style={{marginLeft:'50px', textAlign:'center'}}>
-                                    <div className={styles.profileTitle} style={{textAlign:'left'}}>홍길동</div>
-                                    <div className={styles.profileContent} style={{textAlign:'left'}}>선임 / 0년차</div>
-                                    <div className={styles.profileContent} style={{textAlign:'left'}}>00부문 / 00실</div>
+                                    <div className={styles.profileTitle} style={{textAlign:'left'}}>{userInfo.resultUserName}</div>
+                                    <div className={styles.profileContent} style={{textAlign:'left'}}>{userInfo.resultTitleName} / 0년차</div>
+                                    <div className={styles.profileContent} style={{textAlign:'left'}}>{userInfo.resultDeptName} </div>
                                 </Stack>
                                 <Stack direction='column' style={{ marginLeft:'60px', textAlign:'center'}}>
                                     <div className={styles.profileTitle}>시험회차</div>
@@ -72,7 +75,7 @@ function Result(props) {
                                 </Stack>
                             </Stack>
                         </Stack>
-                        <Stack direction='row' style={{marginLeft:'50px', marginTop:'50x'}}>
+                        <Stack direction='row' style={{marginLeft:'50px', marginTop:'50px'}}>
                             <Stack direction='column'>
                                 <h4 style={{textAlign: 'center', marginBottom:'80px'}}>분야별 역량수준</h4>
                                 <div className="radarChart" style={{width:'500px', height: '450px'}}></div>
@@ -83,7 +86,7 @@ function Result(props) {
                                 <h4 style={{textAlign: 'center'}}>분야별 참여시간</h4>
                                 <div className="pieChart" style={{width:'400px', height: '330px'}}></div>
                             </Stack>
-                            <Stack direction='column'>
+                            <Stack direction='column' style={{paddingRight:'50px'}}>
                                 <h4 style={{textAlign: 'center', marginBottom:'33px'}}>분야별 부족역량</h4>
                                 <div className={styles.wrongQuestionListContainer}>
                                     <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>인터페이스</div>
