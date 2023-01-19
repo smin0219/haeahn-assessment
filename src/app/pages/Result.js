@@ -7,6 +7,8 @@ import {Stack, TextField, Button, Input,} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import backgroundImg from '../images/background.png';
 import RadarChart from '../charts/RadarChart';
+import BarChart from '../charts/BarChart';
+import PieChart from '../charts/PieChart';
 
 const AutodeskButton = styled(Button) `
     background-color: #5b9bd5;
@@ -29,6 +31,8 @@ function Result(props) {
 
     React.useEffect(() => {
         RadarChart();
+        BarChart();
+        PieChart();
     },[]);
 
     return (
@@ -37,9 +41,9 @@ function Result(props) {
                     style={{
                         backgroundImage: `url(${backgroundImg})`,
                         backgroundSize: "cover",
-                        height: "100vh",
+                        height: "100%",
                         width: '100%',
-                        minWidth:'1700px'
+                        minWidth:'1700px',
                     }}
                 >
                 <div className={styles.resultContainer}>
@@ -68,16 +72,19 @@ function Result(props) {
                                 </Stack>
                             </Stack>
                         </Stack>
-                        <Stack direction='row' style={{marginLeft:'80px', marginTop:'45px'}}>
+                        <Stack direction='row' style={{marginLeft:'50px', marginTop:'50x'}}>
                             <Stack direction='column'>
-                                <h4 style={{textAlign: 'center'}}>분야별 역량수준</h4>
-                                <div className="chartdiv" style={{width:'480px', height: '400px'}}></div>
+                                <h4 style={{textAlign: 'center', marginBottom:'80px'}}>분야별 역량수준</h4>
+                                <div className="radarChart" style={{width:'500px', height: '450px'}}></div>
+                            </Stack>
+                            <Stack direction='column' style={{marginLeft:'50px'}}>
+                                <h4 style={{textAlign: 'center'}}>총 참여시간(~90min)</h4>
+                                <div className="barChart" style={{width:'400px', height: '160px', marginBottom:'20px'}}></div>
+                                <h4 style={{textAlign: 'center'}}>분야별 참여시간</h4>
+                                <div className="pieChart" style={{width:'400px', height: '330px'}}></div>
                             </Stack>
                             <Stack direction='column'>
-                                <h4 style={{textAlign: 'center'}}>총 참여시간</h4>
-                            </Stack>
-                            <Stack direction='column'>
-                                <h4 style={{textAlign: 'center'}}>분야별 부족역량</h4>
+                                <h4 style={{textAlign: 'center', marginBottom:'33px'}}>분야별 부족역량</h4>
                                 <div className={styles.wrongQuestionListContainer}>
                                     <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>인터페이스</div>
                                     <Stack direction='row' style={{display:'flex', alignItems:'center', borderBottom: '1px solid', borderColor: '#e1e1e1'}}>

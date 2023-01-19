@@ -1,3 +1,4 @@
+
 .resultContainer{
     position: relative;
     display: flex; 
@@ -8,8 +9,8 @@
 }
 
 .profileContainer{
-    min-width: 1600px;
-    min-height: 800px;
+    min-width: 1570px;
+    min-height: 100vh;
     border-radius: 10px;
     background-color: white;
 }
@@ -39,8 +40,8 @@
     overflow-y: scroll;
     overflow-x: hidden;
     width: 500px;
-    height: 400px;
-    margin-left: 100px;
+    height: 560px;
+    margin-left: 50px;
     border: 1px solid;
     border-color: #e1e1e1;
 }

@@ -2,7 +2,8 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
 function RadarChart(){
-    let chart = am4core.create("chartdiv", am4charts.RadarChart);
+    let chart = am4core.create("radarChart", am4charts.RadarChart);
+    am4core.options.autoDispose = true;
 
     chart.data = [{
         "category": "모델링",
