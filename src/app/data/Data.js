@@ -208,3 +208,15 @@ export const GetUserResultData = (user_id) => {
         console.log(error);
     }
 }
+
+export const GetResultLackData = (user_id) => {
+    try{
+        return axios.post(baseURL + 'quiz-result-lack', null, {
+            params: {
+                user_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}

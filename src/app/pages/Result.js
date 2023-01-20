@@ -9,7 +9,7 @@ import backgroundImg from '../images/background.png';
 import RadarChart from '../charts/RadarChart';
 import BarChart from '../charts/BarChart';
 import PieChart from '../charts/PieChart';
-import { GetBarChartData, GetPieChartData, GetRidarChartData, GetUserResultData } from '../data/Data';
+import { GetBarChartData, GetPieChartData, GetRidarChartData, GetUserResultData, GetResultLackData } from '../data/Data';
 
 const AutodeskButton = styled(Button) `
     background-color: #5b9bd5;
@@ -33,6 +33,7 @@ function Result(props) {
     const [id, setId] = React.useState(location.state.id);
     const [userInfo, setUserInfo] = React.useState(location.state.userInfo);
     const [userResult, setUserResult] = React.useState({});
+    const [resultLack, setResultLack] = React.useState({});
 
     React.useEffect(() => {
         GetUserResultData(userInfo.resultMessage).then((res) => {
@@ -49,6 +50,10 @@ function Result(props) {
 
         GetPieChartData(userInfo.resultMessage).then((res) => {
             PieChart(res.data);
+        })
+
+        GetResultLackData(userInfo.resultMessage).then((res) => {
+            setResultLack(res.data);
         })
     },[]);
 
@@ -105,11 +110,16 @@ function Result(props) {
                             <Stack direction='column' style={{paddingRight:'50px'}}>
                                 <h4 style={{textAlign: 'center', marginBottom:'33px'}}>분야별 부족역량</h4>
                                 <div className={styles.wrongQuestionListContainer}>
-                                    <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>모델링</div>
-                                    <Stack direction='row' style={{display:'flex', alignItems:'center', borderBottom: '1px solid', borderColor: '#e1e1e1'}}>
-                                        <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div> 
-                                        <AutodeskButton>Autodesk Help</AutodeskButton>
-                                    </Stack>
+                                    {resultLack.length !== undefined ? resultLack.map((result) => {
+                                        <>
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>{result.category}</div>
+                                            <Stack direction='row' style={{display:'flex', alignItems:'center', borderBottom: '1px solid', borderColor: '#e1e1e1'}}>
+                                                <div className={styles.wrongQuestionList}>{result.meaning}</div> 
+                                                <AutodeskButton>Autodesk Help</AutodeskButton>
+                                            </Stack>
+                                        </>
+                                    }) : <></>}
+{/*                                     
                                     <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
                                     <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
                                     <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
@@ -132,7 +142,7 @@ function Result(props) {
                                     <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div>
                                     <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
                                     <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
+                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div> */}
                                 </div>
                             </Stack>
                             
