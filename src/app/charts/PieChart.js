@@ -1,31 +1,22 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
-function PieChart(){
+function PieChart(data){
+    debugger;
     let chart = am4core.create("pieChart", am4charts.PieChart);
     am4core.options.autoDispose = true;
 
-    chart.data = [{
-        "category": "모델링",
-        "value": "48.6",
-        "color": am4core.color("#b4c7e7"),
-    },{
-        "category": "도면화",
-        "value": "17.4",
-        "color": am4core.color("#bdd7ee"),
-    },{
-        "category": "데이터 활용",
-        "value": "10.8",
-        "color": am4core.color("#f8cbad"),
-    },{
-        "category": "협업/관리",
-        "value": "7.2",
-        "color": am4core.color("#c5e0b4"),
-    },{
-        "category": "인터페이스",
-        "value": "6",
-        "color": am4core.color("#ffe699"),
-    }];
+    chart.data = [];
+
+    let color = [am4core.color("#b4c7e7"), am4core.color("#bdd7ee"), am4core.color("#f8cbad"), am4core.color("#c5e0b4"), am4core.color("#ffe699")];
+
+    for(let i=0; i<data.length; i++){
+        chart.data.push({
+            "category": data[i].category,
+            "value": data[i].value,
+            "color": color[i]
+        });
+    }
 
     var pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.dataFields.value = "value";

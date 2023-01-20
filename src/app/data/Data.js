@@ -160,3 +160,51 @@ export const GetEndQuiz = (user_id, test_id) => {
         console.log(error);
     }
 }
+
+export const GetBarChartData = (user_id) => {
+    try{
+        return axios.post(baseURL + 'quiz-result-period-minutes', null, {
+            params: {
+                user_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const GetPieChartData = (user_id) => {
+    try{
+        return axios.post(baseURL + 'quiz-result-period-minutes-category', null, {
+            params: {
+                user_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const GetRidarChartData = (user_id) => {
+    try{
+        return axios.post(baseURL + 'quiz-result-category', null, {
+            params: {
+                user_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const GetUserResultData = (user_id) => {
+    try{
+        return axios.post(baseURL + 'quiz-result-score', null, {
+            params: {
+                user_id
+            },
+          });
+    } catch (error) {
+        console.log(error);
+    }
+}

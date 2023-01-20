@@ -42,7 +42,6 @@ function End(){
                             <div style={{textAlign:'center', marginTop:'40px', paddingBottom:'100px' }}>평가 결과는 1월 27일(금) 결과 조회 웹페이지를 통해 확인하실 수 있습니다. (추후 팀즈로 링크 공유)</div>
                         </div>
                     </div>
-
                 </Paper>
             </div>
             <div style={{float:'right', padding:'10px 30px 0 0'}}>

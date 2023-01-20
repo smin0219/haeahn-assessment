@@ -9,7 +9,7 @@
 }
 
 .profileContainer{
-    min-width: 1570px;
+    min-width: 1700px;
     min-height: 100vh;
     border-radius: 10px;
     background-color: white;
@@ -39,7 +39,7 @@
 .wrongQuestionListContainer{
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 500px;
+    width: 450px;
     height: 560px;
     margin-left: 50px;
     border: 1px solid;

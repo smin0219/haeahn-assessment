@@ -1,19 +1,20 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
-function BarChart(){
+function BarChart(data){
     let chart = am4core.create("barChart", am4charts.XYChart);
     am4core.options.autoDispose = true;
 
-    chart.data = [{
-        "category": "평균",
-        "value": "62min",
-        "color": "#b4c7e7"
-    },{
-        "category": "나",
-        "value": "73min",
-        "color": "#5b9bd5"
-    }];
+    let color = [am4core.color("#b4c7e7"), am4core.color("#5b9bd5")];
+    chart.data = [];
+
+    for(let i=0; i<data.length; i++){
+        chart.data.push({
+            "category": data[i].category,
+            "value": data[i].value,
+            "color": color[i]
+        });
+    }
 
     var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "category";

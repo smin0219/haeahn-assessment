@@ -1,31 +1,19 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
-function RadarChart(){
+function RadarChart(data){
     let chart = am4core.create("radarChart", am4charts.RadarChart);
     am4core.options.autoDispose = true;
 
-    chart.data = [{
-        "category": "모델링",
-        "point": "3",
-        "average": "4",
-    },{
-        "category": "도면화",
-        "point": "3",
-        "average": "4",
-    },{
-        "category": "데이터 활용",
-        "point": "3",
-        "average": "4",
-    },{
-        "category": "협업/관리",
-        "point": "3",
-        "average": "4",
-    },{
-        "category": "인터페이스",
-        "point": "3",
-        "average": "4",
-    }];
+    chart.data = [];
+
+    for(let i=0; i<data.length; i++){
+        chart.data.push({
+            "category": data[i].category,
+            "point": data[i].point,
+            "average": data[i].average
+        });
+    }
 
     chart.dataSource.url = "chart_data.json";
 

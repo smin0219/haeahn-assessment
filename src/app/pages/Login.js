@@ -130,6 +130,7 @@ function Login() {
 
     const handleResultClick = () => {
         debugger;
+        userInfo.resultMessage = '20230134'
         navigate("/result/", {
             state: {
                 id: id,

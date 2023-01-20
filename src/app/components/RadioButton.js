@@ -15,7 +15,6 @@ function RadioButtonsGroup(props) {
     
     if(e.target.value !== undefined){
       let chooseId = props.questionInfo.choices.filter((choice) => choice.content === e.target.value)[0].seq;
-      debugger;
       SetChoose(props.testInfo.user_id, props.testInfo.seq, props.questionInfo.id, chooseId).then((res) => {
         props.setIsUpdated(!props.isUpdated);
       });
