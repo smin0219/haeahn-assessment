@@ -2,7 +2,6 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 
 function PieChart(data){
-    debugger;
     let chart = am4core.create("pieChart", am4charts.PieChart);
     am4core.options.autoDispose = true;
 

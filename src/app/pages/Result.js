@@ -35,6 +35,23 @@ function Result(props) {
     const [userResult, setUserResult] = React.useState({});
     const [resultLack, setResultLack] = React.useState({});
 
+    const resultLackList = (category) => {
+        return(
+            <>
+                {resultLack[category].map((result, idx) => {
+                    return(
+                        <div key={idx}>
+                            <Stack direction='row' style={{display:'flex', alignItems:'center', borderBottom: '1px solid', borderColor: '#e1e1e1'}}>
+                                <div className={styles.wrongQuestionList}>{result.meaning}</div>
+                                <AutodeskButton onClick={() => {window.open(result.autodesk_link, "_blank")}}>Autodesk Help</AutodeskButton>
+                            </Stack>
+                        </div>
+                    )
+                })}
+            </>
+        )
+    }
+
     React.useEffect(() => {
         GetUserResultData(userInfo.resultMessage).then((res) => {
             setUserResult(res.data[0]);
@@ -53,7 +70,26 @@ function Result(props) {
         })
 
         GetResultLackData(userInfo.resultMessage).then((res) => {
-            setResultLack(res.data);
+            let result = {
+                "모델링": [],
+                "도면화": [],
+                "데이터 활용": [],
+                "협업/관리": [],
+                "인터페이스": []
+            }
+
+            for(let i=0; i<res.data.length; i++){
+                switch (res.data[i].category){
+                    case "모델링": result["모델링"].push(res.data[i]); continue;
+                    case "도면화": result["도면화"].push(res.data[i]); continue;
+                    case "데이터 활용": result["데이터 활용"].push(res.data[i]); continue;
+                    case "협업/관리": result["협업/관리"].push(res.data[i]); continue;
+                    case "인터페이스": result["인터페이스"].push(res.data[i]); continue;
+                    default: break;
+                }
+            }
+
+            setResultLack(result);
         })
     },[]);
 
@@ -98,7 +134,7 @@ function Result(props) {
                         </Stack>
                         <Stack direction='row' style={{marginLeft:'50px', marginTop:'50px'}}>
                             <Stack direction='column'>
-                                <h4 style={{textAlign: 'center', marginBottom:'100px'}}>분야별 역량수준</h4>
+                                <h4 style={{textAlign: 'center', marginBottom:'50px'}}>분야별 역량수준</h4>
                                 <div className="radarChart" style={{width:'650px', height: '450px'}}></div>
                             </Stack>
                             <Stack direction='column' style={{marginLeft:'50px'}}>
@@ -110,39 +146,20 @@ function Result(props) {
                             <Stack direction='column' style={{paddingRight:'50px'}}>
                                 <h4 style={{textAlign: 'center', marginBottom:'33px'}}>분야별 부족역량</h4>
                                 <div className={styles.wrongQuestionListContainer}>
-                                    {resultLack.length !== undefined ? resultLack.map((result) => {
+                                    {Object.keys(resultLack).length > 0 ?
                                         <>
-                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>{result.category}</div>
-                                            <Stack direction='row' style={{display:'flex', alignItems:'center', borderBottom: '1px solid', borderColor: '#e1e1e1'}}>
-                                                <div className={styles.wrongQuestionList}>{result.meaning}</div> 
-                                                <AutodeskButton>Autodesk Help</AutodeskButton>
-                                            </Stack>
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#b4c7e7'}}>모델링</div>
+                                            {resultLackList("모델링")}
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#bdd7ee'}}>도면화</div>
+                                            {resultLackList("도면화")}
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#f8cbad'}}>데이터 활용</div>
+                                            {resultLackList("데이터 활용")}
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#c5e0b4'}}>협업/관리</div>
+                                            {resultLackList("협업/관리")}
+                                            <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#ffe699'}}>인터페이스</div>
+                                            {resultLackList("인터페이스")}
                                         </>
-                                    }) : <></>}
-{/*                                     
-                                    <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
-                                    <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#bdd7ee'}}>도면화</div>
-                                    <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div>
-                                    <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
-                                    <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#f8cbad'}}>데이터 활용</div>
-                                    <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div>
-                                    <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
-                                    <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#c5e0b4'}}>협업/관리</div>
-                                    <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div>
-                                    <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div>
-                                    <div className={styles.wrongQuestionCategory} style={{backgroundColor: '#ffe699'}}>인터페이스</div>
-                                    <div className={styles.wrongQuestionList}>View, Legend, Schedule과 Sheet의 관계 이해</div>
-                                    <div className={styles.wrongQuestionList}>Type, Instance, Shared Paramter에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Sheet에 대한 이해</div>
-                                    <div className={styles.wrongQuestionList}>Detail Line의 속성에 대한 정확한 이해</div> */}
+                                     : <></>}
                                 </div>
                             </Stack>
                             
